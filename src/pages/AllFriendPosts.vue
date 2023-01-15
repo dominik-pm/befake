@@ -27,6 +27,15 @@ export default {
             this.friends.push({
                 username: "mann"
             })
+        },
+        filter(name) {
+            for (let friendpost of document.getElementsByClassName("friendpost")) {
+                if (!friendpost.innerText.includes(name)) {
+                    friendpost.style = "display:none"
+                } else {
+                    friendpost.style.display = "block"
+                }
+            }
         }
     },
     mounted() {
@@ -38,7 +47,10 @@ export default {
 </script>
 
 <template>
+    <div>
+        <input type="search" id="search" @input="event => {filter(event.target.value)}" class="m-auto mb-5 text-black block p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-white-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Filter user">
+    </div>
     <div v-for="(friend, index) in friends" class="m-auto">
-        <FriendPosts :user-name="friend['username']"/>
+        <FriendPosts class="friendpost" :user-name="friend['username']"/>
     </div>
 </template>
