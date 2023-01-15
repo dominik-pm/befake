@@ -12,8 +12,7 @@ export default {
         expiration: localStorage.getItem("expiration") ?? "",
         phone: localStorage.getItem("phone") ?? "",
       }),
-      hideNavbar: true,
-      friendUserName: ""
+      hideNavbar: true
     };
   },
 };
@@ -92,10 +91,7 @@ export default {
           </a>
           <div class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
             <div>
-              <a v-bind:href="'allfriendposts?userName=' + friendUserName" >Posts from friend!</a>
-            </div>
-            <div>
-              <input type="text" placeholder="userName" v-model="friendUserName" class="text-black">
+              <a href="allfriendposts">Posts from friends!</a>
             </div>
           </div>
         </div>
