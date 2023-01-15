@@ -28,3 +28,7 @@ coverage
 *.sw?
 
 .firebase
+
+package-lock.json
+package.json
+yarn.lock
