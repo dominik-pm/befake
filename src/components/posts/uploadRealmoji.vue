@@ -27,13 +27,13 @@ export default {
       console.log("user is ", this.user);
       const n = `Photos/${this.user.id}/realmoji/${
         this.user.id
-      }-realmoji-instant-${moment().unix()}.jpg`;
+      }-realmoji-${"laughing"}-${moment().unix()}.jpg`;
       console.log(n);
       const json_data = {
         cacheControl: "public,max-age=172800",
         contentType: "image/jpeg",
         metadata: {
-          type: "instantRealmoji",
+          type: "realmoji",
           uid: this.user.id,
           creationDate: moment().format("ddd MMM D Y HH:mm:ss [GMT+0000]"),
         },
@@ -100,31 +100,35 @@ export default {
               ""
             );
           });
+          return n
       });
     },
     async submitRealMoji() {
       this.loading = true;
       console.log(this.postID);
+      let n
       try {
-        await this.uploadPhotoToBeReal(this.file);
+        n = await this.uploadPhotoToBeReal(this.file);
       } catch (err) {
         console.log(err);
         return;
       }
       fetch(
-        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis/instant?postId=${this.postID}&postUserId=${this.user.id}`,
+        `https://us-central1-alexisbarreyat-bereal.cloudfunctions.net/sendRealMoji`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             "content-type": "application/json",
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({
-            media: {
-              path: this.image.path,
-              bucket: "storage.bere.al",
-              width: 500,
-              height: 500,
+            data: {
+              action: "add",
+              emoji: "😂",
+              ownerId: this.user.id,
+              photoId: this.postID,
+              type: "laughing",
+              uri: n
             },
           }),
         }

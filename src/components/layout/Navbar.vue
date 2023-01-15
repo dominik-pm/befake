@@ -1,6 +1,7 @@
 <script>
 import MyButton from "../ui/Button.vue";
 import DiscordLogo from "../../assets/discord-logo.svg";
+import FriendPosts from "../posts/FriendPosts.vue";
 export default {
   components: { MyButton, DiscordLogo },
   data() {
@@ -12,6 +13,7 @@ export default {
         phone: localStorage.getItem("phone") ?? "",
       }),
       hideNavbar: true,
+      friendUserName: ""
     };
   },
 };
@@ -34,7 +36,7 @@ export default {
 <template>
   <nav class="text-white mb-3">
     <div class="max-w-8xl py-2 sm:mx-8 mr-2">
-      <div class="flex justify-between flex-col sm:flex-row">
+      <div class="flex justify-between flex-col sm:flex-row items-center">
         <div>
           <!-- logo -->
           <a
@@ -57,7 +59,7 @@ export default {
         </a>
         <!-- links -->
         <div
-          class="items-end space-x-2 flex flex-col sm:flex sm:flex-row p-[.5rem]"
+          class="items-center space-x-2 flex flex-col sm:flex sm:flex-row p-[.5rem]"
           :class="{
             hidden: hideNavbar,
           }">
@@ -88,6 +90,14 @@ export default {
             v-if="this.$store.state.loggedIn">
             Logout
           </a>
+          <div class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
+            <div>
+              <a v-bind:href="'allfriendposts?userName=' + friendUserName" >Posts from friend!</a>
+            </div>
+            <div>
+              <input type="text" placeholder="userName" v-model="friendUserName" class="text-black">
+            </div>
+          </div>
         </div>
       </div>
     </div>
