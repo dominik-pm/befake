@@ -213,7 +213,7 @@ export default defineComponent({
       </div>
       <div class="text-center mt-4">
         <div class="flex flex-col mt-4 w-[100%]">
-          <div v-if="this.post.realMojis.length > 3">
+          <div v-if="this.post.realMojis.length > colCount">
             <div :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
               <Realmoji
                 v-for="e in post.realMojis.slice(0, this.colCount)"
