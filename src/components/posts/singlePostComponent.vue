@@ -21,6 +21,7 @@ export default defineComponent({
       hideSecondaryPhoto: false,
       isOwner: false,
       showEmojis: false,
+      colCount: 3
     };
   },
   methods: {
@@ -185,7 +186,7 @@ export default defineComponent({
         <img
           referrerpolicy="no-referrer"
           v-bind:src="post.photoURL"
-          class="relative top-0 left-0 rounded-md sm:w-[400px] w-[100%]"
+          class="relative top-0 left-0 rounded-md sm:w-[400px] w-[100%] m-auto"
           @click="hideSecondaryPhoto = !hideSecondaryPhoto" />
         <img
           referrerpolicy="no-referrer"
@@ -211,16 +212,18 @@ export default defineComponent({
         </div>
       </div>
       <div class="text-center mt-4">
-        <div class="flex flex-col mt-4 ml-[25%] w-[100%]">
-          <div v-if="this.post.realMojis.length > 2">
-            <Realmoji
-              v-for="e in post.realMojis.slice(0, 2)"
-              :key="e.id"
-              :realmoji="e" />
+        <div class="flex flex-col mt-4 w-[100%]">
+          <div v-if="this.post.realMojis.length > 3">
+            <div :class="'grid gap-3 grid-columns-3' + colCount">
+              <Realmoji
+                v-for="e in post.realMojis.slice(0, 3)"
+                :key="e.id"
+                :realmoji="e" />
+            </div>
             <Transition name="slide">
-              <div v-if="showEmojis">
+              <div v-if="showEmojis" :class="'grid gap-3 grid-columns-3' + colCount">
                 <Realmoji
-                  v-for="e in post.realMojis.slice(2)"
+                  v-for="e in post.realMojis.slice(3)"
                   :key="e.id"
                   :realmoji="e" />
               </div>
@@ -232,9 +235,9 @@ export default defineComponent({
                 {{
                   (showEmojis ? "Hide" : "Show") +
                   " " +
-                  (this.post.realMojis.length - 2) +
+                  (this.post.realMojis.length - 3) +
                   " " +
-                  (this.post.realMojis.length - 2 == 1
+                  (this.post.realMojis.length - 3 == 1
                     ? "realmoji"
                     : "realmojis")
                 }}

@@ -4,7 +4,7 @@ export default {
 };
 </script>
 <template>
-  <div class="flex items-center mb-2">
+  <div class="flex items-center mb-2 flex">
     <div class="relative">
       <img
         referrerpolicy="no-referrer"
@@ -15,6 +15,6 @@ export default {
         >{{ realmoji.emoji }}
       </span>
     </div>
-    <span class="font-bold ml-4">{{ realmoji.userName }}</span>
+    <span class="font-bold ml-4 mr-4">{{ realmoji.userName }}</span>
   </div>
 </template>

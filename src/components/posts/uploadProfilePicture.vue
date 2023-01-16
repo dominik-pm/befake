@@ -38,14 +38,14 @@ export default {
       myHeaders.append("user-agent", " okhttp/4.10.0");
 
       var formdata = new FormData();
-      formdata.append("file", file);
+      formdata.append("file", this.file);
 
       var requestOptions = {
         method: 'PUT',
         headers: myHeaders,
         body: formdata
       };
-      fetch("https://mobile.bereal.com/api/person/me/profile-picture", requestOptions)
+      fetch(`${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me/profile-picture`, requestOptions)
         .then((res) => {
           if (res.status !== 200) throw new Error("Failed to upload");
           return res.json();
