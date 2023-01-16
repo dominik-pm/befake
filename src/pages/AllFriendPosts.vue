@@ -24,7 +24,7 @@ export default {
             .then((data) => 
             {
                 //Change this
-                this.friends = [...data]
+                this.friends = data
             })
         },
         loadFriendsDummy() {

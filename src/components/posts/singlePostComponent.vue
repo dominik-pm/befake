@@ -21,7 +21,7 @@ export default defineComponent({
       hideSecondaryPhoto: false,
       isOwner: false,
       showEmojis: false,
-      colCount: 3
+      colCount: 4
     };
   },
   methods: {
@@ -214,16 +214,16 @@ export default defineComponent({
       <div class="text-center mt-4">
         <div class="flex flex-col mt-4 w-[100%]">
           <div v-if="this.post.realMojis.length > 3">
-            <div :class="'grid gap-3 grid-columns-' + colCount">
+            <div :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
               <Realmoji
-                v-for="e in post.realMojis.slice(0, 3)"
+                v-for="e in post.realMojis.slice(0, this.colCount)"
                 :key="e.id"
                 :realmoji="e" />
             </div>
             <Transition name="slide">
-              <div v-if="showEmojis" :class="'grid gap-3 grid-columns-' + colCount">
+              <div v-if="showEmojis" :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
                 <Realmoji
-                  v-for="e in post.realMojis.slice(3)"
+                  v-for="e in post.realMojis.slice(this.colCount)"
                   :key="e.id"
                   :realmoji="e" />
               </div>
@@ -268,7 +268,20 @@ export default defineComponent({
 </template>
 
 <style>
-.grid-columns-3 {
-  grid-template-columns: 1fr 1fr 1fr;
+img {
+  max-width: none !important;
+}
+.grid-columns-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+@media only screen and (max-width: 900px) {
+  .grid-columns-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .grid-columns-4 {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
