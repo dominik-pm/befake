@@ -235,9 +235,9 @@ export default defineComponent({
                 {{
                   (showEmojis ? "Hide" : "Show") +
                   " " +
-                  (this.post.realMojis.length - 3) +
+                  (this.post.realMojis.length - this.colCount) +
                   " " +
-                  (this.post.realMojis.length - 3 == 1
+                  (this.post.realMojis.length - this.colCount == 1
                     ? "realmoji"
                     : "realmojis")
                 }}
