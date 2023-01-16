@@ -214,14 +214,14 @@ export default defineComponent({
       <div class="text-center mt-4">
         <div class="flex flex-col mt-4 w-[100%]">
           <div v-if="this.post.realMojis.length > 3">
-            <div :class="'grid gap-3 grid-columns-3' + colCount">
+            <div :class="'grid gap-3 grid-columns-' + colCount">
               <Realmoji
                 v-for="e in post.realMojis.slice(0, 3)"
                 :key="e.id"
                 :realmoji="e" />
             </div>
             <Transition name="slide">
-              <div v-if="showEmojis" :class="'grid gap-3 grid-columns-3' + colCount">
+              <div v-if="showEmojis" :class="'grid gap-3 grid-columns-' + colCount">
                 <Realmoji
                   v-for="e in post.realMojis.slice(3)"
                   :key="e.id"
@@ -266,3 +266,9 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style>
+.grid-columns-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+</style>

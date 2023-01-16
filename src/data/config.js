@@ -1,4 +1,4 @@
 export default {
-    apiURL: "https://localhost:7118/api/BeReal",
-    test: true
+    apiURL: "https://realapi.matura2022.com/api/BeReal",
+    test: false
 }

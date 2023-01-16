@@ -3,21 +3,27 @@ import { now } from 'moment'
 import config from '../../data/config.js'
 import 'tw-elements'
 
+let posts = []
 
 export default {
     props: ["userName"],
     data() {
         return {
-            posts: []
+            count: 0
         }
     },
     methods: {
         loadPosts() {
             fetch(
-                `${config.apiURL}/${this.userName}`
+                `${config.apiURL}/getPostsByUsername/${this.userName}`
                 )
-                .then((response) => response.json)
-                .then((data) => {this.posts = [...data]})
+                .then((response) => response.json())
+                .then((data) => {
+                    for (let post of data) {
+                        document.getElementById(`collapse${this.userName.replaceAll('.','')}`).innerHTML += `<li class="rounded-lg border-4"><h3 class="text-center mb-8">${post.date}</h3><img src="${post.url1}" class="m-auto mb-8"><img src="${post.url2}" class="m-auto mb-8"></li>`
+                        
+                    }
+                })
         },
         loadPostsDummy() {
             this.posts.push({
@@ -30,7 +36,7 @@ export default {
     mounted() {
         if (config.test) {
             this.loadPostsDummy()
-        } else this.loadPosts()
+        }
         
     }
 }
@@ -38,16 +44,12 @@ export default {
 
 <template>
     <div class="m-auto text-center">
-        <button class="m-auto transition duration-1000 ease-in-out text-center"  type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + userName" aria-expanded="false" aria-controls="collapseExample">
+        <button @click="loadPosts()" class="m-auto transition duration-1000 ease-in-out text-center"  type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + userName.replaceAll('.','')" aria-expanded="false" aria-controls="collapseExample">
             <h1 class="inline-block mr-5">{{ userName }}</h1>
             <font-awesome-icon icon="fa-arrow-down" size="2x" />
         </button>
-        <ul class="collapse overflow-y-scroll max-h-96" v-bind:id="'collapse' + userName">
-            <li v-for="(post, index) in posts" class="rounded-lg border-4">
-                <h3 class="text-center mb-8">{{ post.date.toLocaleDateString("en-US") }}</h3>
-                <img v-bind:src="post.url1" class="m-auto mb-8">
-                <img v-bind:src="post.url2" class="m-auto mb-8">
-            </li>
+        <ul class="collapse overflow-y-scroll" v-bind:id="'collapse' + userName.replaceAll('.','')">
+            
         </ul>
     </div>
 
@@ -56,5 +58,8 @@ export default {
 <style>
 h1 {
     font-size: xx-large !important;
+}
+img {
+    max-height: 500px;
 }
 </style>
