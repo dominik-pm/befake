@@ -1,8 +1,16 @@
+var fs = require('fs');
+var https = require('https')
+var privateKey  = fs.readFileSync('/etc/ssl/private/key.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/ssl/private/cert.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
 // create a new express app
 const express = require("express");
 const app = express();
 // import ffmpeg
 const ffmpeg = require("fluent-ffmpeg");
+
+
 
 // serve static files from the Vue app
 app.use(express.static(__dirname + "/dist"));
@@ -23,4 +31,8 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");
 }); // listen on port 3000
 
-app.listen(3000);
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+//httpServer.listen(8080);
+httpsServer.listen(9999);
