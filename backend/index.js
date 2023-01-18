@@ -14,7 +14,7 @@ const ffmpeg = require("fluent-ffmpeg");
 
 
 // serve static files from the Vue app
-app.use(express.static(__dirname + "/dist"));
+app.use(express.static(__dirname + "/../dist"));
 
 // create backend api endpoint for media encoding
 app.get("/api/encode", (req, res) => {
