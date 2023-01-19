@@ -247,15 +247,12 @@ export default defineComponent({
           <div v-else>
             <Realmoji v-for="e in post.realMojis" :key="e.id" :realmoji="e" />
           </div>
-          <div class="flex flex-col">
-            <!--SHOW OWN REALMOJIS-->
-          </div>
 
-          <UploadRealmoji :postID="post.id" />
+          <UploadRealmoji :realmojis="realmojis" :postID="post.id" />
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex flex-wrap">
       <MyInput v-model="comment" placeholder="Comment" />
       <!-- <input
         type="text"
