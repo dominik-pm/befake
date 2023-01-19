@@ -1,3 +1,10 @@
+var fs = require('fs');
+var http = require('http')
+var https = require('https')
+var privateKey  = fs.readFileSync('/etc/ssl/private/key.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/ssl/private/cert.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
 // create a new express app
 const express = require("express");
 const app = express();
@@ -19,8 +26,12 @@ app.get("/api/encode", (req, res) => {
   const video = ffmpeg();
 });
 // send / to index.html
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");
 }); // listen on port 3000
 
-app.listen(3000);
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(9999);
+httpsServer.listen(10001);

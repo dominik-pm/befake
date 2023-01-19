@@ -6,9 +6,6 @@ import Realmoji from "./Realmoji.vue";
 
 export default {
   props: ["postID", "realmojis"],
-  components: {
-    Realmoji
-  },
   data() {
     return {
       file: null,
@@ -107,16 +104,19 @@ export default {
       await this.putFileIntoGoogleStorage(file, response)
       
     },
-    async submitRealMoji() {
+    async submitRealMoji(uploadToStorage = true, realmoji = null) {
       this.loading = true;
       console.log(this.postID);
-      try {
-        await this.uploadPhotoToBeReal(this.file);
-      } catch (err) {
-        console.log(err);
-        return;
+      if (uploadToStorage) {
+        try {
+          await this.uploadPhotoToBeReal(this.file);
+        } catch (err) {
+          console.log(err);
+          return;
+        }
       }
-      if (this.type == "instant") {
+     
+      if (realmoji == null) {
         fetch(
         `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis/instant?postId=${this.postID}&postUserId=${this.user.id}`,
         {
@@ -155,7 +155,7 @@ export default {
         });
       } else {
         fetch(
-        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me/realmojis`,
+        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis?postId=${this.postID}&postUserId=${this.user.id}`,
         {
           method: "PUT",
           headers: {
@@ -163,13 +163,7 @@ export default {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({
-            media: {
-              path: this.image.path,
-              bucket: "storage.bere.al",
-              width: 500,
-              height: 500,
-            },
-            emoji: this.type
+            emoji: realmoji.emoji
           }),
         }
       )
@@ -194,58 +188,65 @@ export default {
       }
       
     },
+    async setRealMoji() {
+      fetch(
+        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me/realmojis`,
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            media: {
+              path: this.image.path != null ? this.image.path : realmoji.media.url.substring(realmoji.media.url.search("Photos")),
+              bucket: "storage.bere.al",
+              width: 500,
+              height: 500,
+            },
+            emoji: realmoji.emoji
+          }),
+        }
+      )
+        .then((res) => {
+          if (res.status !== 200) throw new Error("Failed to upload");
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          console.log(data);
+          this.$store.dispatch("getPosts").then((d) => {
+            this.loading = false;
+            this.file = null;
+            this.imageurl = null;
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.loading = false;
+          this.$store.commit("error", "Failed to upload");
+        });
+    }
   },
 
-  components: { MyButton },
+  components: { MyButton, Realmoji },
 };
 </script>
 <template>
   <div class="flex items-center gap-3">
-    <div>
-      <label :for="postID">
-        <div
-          class="border-white w-24 h-24 rounded-[50%] border-2 cursor-pointer">
-          <input
-            type="file"
-            :id="postID"
-            style="display: none"
-            name="image"
-            @change="onFileChange" />
-
-          <div v-if="!file">
-            <svg
-              class="w-24 h-24 rp"
-              width="107"
-              height="107"
-              viewBox="0 0 107 107"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <rect
-                x="18.3429"
-                y="45.8571"
-                width="69.8048"
-                height="15.2857"
-                fill="white" />
-              <rect
-                x="45.8571"
-                y="88.1476"
-                width="69.8048"
-                height="15.2857"
-                transform="rotate(-90 45.8571 88.1476)"
-                fill="white" />
-            </svg>
-          </div>
-          <div v-else class="cursor-pointer">
-            <img :src="imageurl" class="w-24 rounded-[50%]" />
-          </div>
-        </div>
-      </label>
-    </div>
     <!-- <div>Hi</div> -->
-    <div>
+    <div class="flex flex-row flex-wrap">
+      <Realmoji :emoji="'👍'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '👍'))" :realmoji="realmojis.find(element => element.emoji == '👍')" :own="true"></Realmoji>
+      <Realmoji :emoji="'😃'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😃'))" :realmoji="realmojis.find(element => element.emoji == '😃')" :own="true"></Realmoji>
+      <Realmoji :emoji="'😂'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😂'))" :realmoji="realmojis.find(element => element.emoji == '😂')" :own="true"></Realmoji>
+      <Realmoji :emoji="'😮'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😮'))" :realmoji="realmojis.find(element => element.emoji == '😮')" :own="true"></Realmoji>
+      <Realmoji :emoji="'😍'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😍'))" :realmoji="realmojis.find(element => element.emoji == '😍')" :own="true"></Realmoji>
+
+      <!--
       <div v-for="(realmoji, index) in realmojis"> 
-        <RealMoji :realmoji="realmoji" :own="true"></RealMoji>
+        <Realmoji @clicked=" () => submitRealMoji(false, realmoji)" :realmoji="realmoji" :own="true"></Realmoji>
       </div>
+      -->
         <!--
         <select v-model="type" class="w-80">
           <option disabled>Choose Emoji Type to upload</option>
@@ -256,6 +257,49 @@ export default {
           <option>😍</option>
         </select>
         -->
+      <div>
+        <label :for="postID">
+          <div
+            class="border-white w-24 h-24 rounded-[50%] border-2 cursor-pointer relative">
+            <input
+              type="file"
+              :id="postID"
+              style="display: none"
+              name="image"
+              @change="onFileChange" />
+
+            <div v-if="!file">
+              <svg
+                class="w-24 h-24 rp"
+                width="107"
+                height="107"
+                viewBox="0 0 107 107"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect
+                  x="18.3429"
+                  y="45.8571"
+                  width="69.8048"
+                  height="15.2857"
+                  fill="white" />
+                <rect
+                  x="45.8571"
+                  y="88.1476"
+                  width="69.8048"
+                  height="15.2857"
+                  transform="rotate(-90 45.8571 88.1476)"
+                  fill="white" />
+              </svg>
+            </div>
+            <div v-else class="cursor-pointer">
+              <img :src="imageurl" class="w-24 rounded-[50%]" />
+            </div>
+            <span class="absolute top-[50px] left-[60px] text-5xl">
+              ⚡
+            </span>
+          </div>
+        </label>
+      </div>
         <MyButton @clickedd="submitRealMoji" :loading="loading">Upload </MyButton>
     </div>
   </div>

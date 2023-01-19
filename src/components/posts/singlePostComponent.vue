@@ -7,7 +7,7 @@ import MyInput from "../ui/Input.vue";
 import UploadRealmoji from "./uploadRealmoji.vue";
 import Realmoji from "./Realmoji.vue";
 export default defineComponent({
-  props: ["post"],
+  props: ["post", "realmojis"],
   data() {
     return {
       iframesrc: this.post.location
@@ -21,6 +21,7 @@ export default defineComponent({
       hideSecondaryPhoto: false,
       isOwner: false,
       showEmojis: false,
+      colCount: 4
     };
   },
   methods: {
@@ -185,7 +186,7 @@ export default defineComponent({
         <img
           referrerpolicy="no-referrer"
           v-bind:src="post.photoURL"
-          class="relative top-0 left-0 rounded-md sm:w-[400px] w-[100%]"
+          class="relative top-0 left-0 rounded-md sm:w-[400px] w-[100%] m-auto"
           @click="hideSecondaryPhoto = !hideSecondaryPhoto" />
         <img
           referrerpolicy="no-referrer"
@@ -211,16 +212,18 @@ export default defineComponent({
         </div>
       </div>
       <div class="text-center mt-4">
-        <div class="flex flex-col mt-4 ml-[25%] w-[100%]">
-          <div v-if="this.post.realMojis.length > 2">
-            <Realmoji
-              v-for="e in post.realMojis.slice(0, 2)"
-              :key="e.id"
-              :realmoji="e" />
+        <div class="flex flex-col mt-4 w-[100%]">
+          <div v-if="this.post.realMojis.length > colCount">
+            <div :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
+              <Realmoji
+                v-for="e in post.realMojis.slice(0, this.colCount)"
+                :key="e.id"
+                :realmoji="e" />
+            </div>
             <Transition name="slide">
-              <div v-if="showEmojis">
+              <div v-if="showEmojis" :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
                 <Realmoji
-                  v-for="e in post.realMojis.slice(2)"
+                  v-for="e in post.realMojis.slice(this.colCount)"
                   :key="e.id"
                   :realmoji="e" />
               </div>
@@ -232,9 +235,9 @@ export default defineComponent({
                 {{
                   (showEmojis ? "Hide" : "Show") +
                   " " +
-                  (this.post.realMojis.length - 2) +
+                  (this.post.realMojis.length - this.colCount) +
                   " " +
-                  (this.post.realMojis.length - 2 == 1
+                  (this.post.realMojis.length - this.colCount == 1
                     ? "realmoji"
                     : "realmojis")
                 }}
@@ -245,11 +248,11 @@ export default defineComponent({
             <Realmoji v-for="e in post.realMojis" :key="e.id" :realmoji="e" />
           </div>
 
-          <UploadRealmoji :postID="post.id" />
+          <UploadRealmoji :realmojis="realmojis" :postID="post.id" />
         </div>
       </div>
     </div>
-    <div class="flex">
+    <div class="flex flex-wrap">
       <MyInput v-model="comment" placeholder="Comment" />
       <!-- <input
         type="text"
@@ -263,3 +266,22 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<style>
+img {
+  max-width: none !important;
+}
+.grid-columns-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+@media only screen and (max-width: 900px) {
+  .grid-columns-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media only screen and (max-width: 450px) {
+  .grid-columns-4 {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
