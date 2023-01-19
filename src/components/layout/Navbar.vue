@@ -25,7 +25,7 @@ export default {
     <div class="mr-auto">
       <a class="sm:text-3xl font-bold">BeFake</a>
     </div>
-    <a href="https://github.com/rvaidun/berealviewer" class="mr-3 fill-white">
+    <a to="https://github.com/rvaidun/berealviewer" class="mr-3 fill-white">
       <img src="../../assets/github-svgrepo-com.svg" class="fill-white" />
     </a>
     <MyButton >Copy Credentials</MyButton>
@@ -41,7 +41,7 @@ export default {
           <router-link
             class="flex items-center cursor-pointer"
             v-clipboard:copy="copy"
-            href="/">
+            to="/">
             <img
               src="../../assets/favicon.ico"
               class="h-12 w-12 rounded-full object-cover mr-2" />
@@ -49,7 +49,7 @@ export default {
           </router-link>
         </div>
         <router-link
-          href="#"
+          to="#"
           @click="hideNavbar = !hideNavbar"
           class="absolute top-[0.75rem] right-[1rem] sm:hidden flex flex-col justify-between w-[30px] h-[21px]">
           <span class="h-[3px] w-[100%] bg-white rounded-lg"></span>
@@ -63,24 +63,24 @@ export default {
             hidden: hideNavbar,
           }">
           <a
-            href="https://www.twitter.com/rahulvaidun/"
+            to="https://www.twitter.com/rahulvaidun/"
             class="cursor-pointer text-blue-400 sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
             Twitter
           </a>
 
           <a
             class="cursor-pointer text-red-500 sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
-            href="https://ko-fi.com/rahulvaidun">
+            to="https://ko-fi.com/rahulvaidun">
             Donate
           </a>
           <router-link
             class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
-            href="/map">
+            to="/map">
             Map
           </router-link>
           <router-link
             class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
-            href="/about">
+            to="/about">
             About
           </router-link>
           <router-link
@@ -91,7 +91,7 @@ export default {
           </router-link>
           <div class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
             <div>
-              <router-link href="allfriendposts">Posts from friends!</router-link>
+              <router-link to="allfriendposts">Posts from friends!</router-link>
             </div>
           </div>
         </div>
