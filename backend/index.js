@@ -22,14 +22,14 @@ app.get("/api/encode", (req, res) => {
 
   const images = req.body.images;
   const videoName = "video.mp4";
-  const videoPath = __dirname + "/dist/" + videoName;
+  const videoPath = __dirname + "/../dist/" + videoName;
   // create a new video with the images
   console.log("who are you?");
   const video = ffmpeg();
 });
 // send / to index.html
 app.get("/*", (req, res) => {
-  res.sendFile(__dirname + "/dist/index.html");
+  res.sendFile(__dirname + "/../dist/index.html");
 }); // listen on port 3000
 
 var httpServer = http.createServer(app);
