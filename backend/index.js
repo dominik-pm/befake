@@ -28,7 +28,7 @@ app.get("/api/encode", (req, res) => {
   const video = ffmpeg();
 });
 // send / to index.html
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(__dirname + "/dist/index.html");
 }); // listen on port 3000
 
