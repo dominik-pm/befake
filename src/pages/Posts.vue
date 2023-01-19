@@ -21,7 +21,7 @@ export default {
     NavbarVue,
     UploadPost,
     UploadProfilePicture
-},
+  }, 
   async beforeMount() {
     event("view_posts", {
       event_category: "posts",
@@ -90,6 +90,16 @@ export default {
     timenow() {
       return moment().format("MMMM Do YYYY, h:mm:ss a");
     },
+    async getRealmojis() {
+      fetch(`${this.$store.state.proxyURL}/https://mobile.bereal.com/api/person/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => this.realmojis = data.realmojis)
+    }
   },
   computed: {
     ...mapState({

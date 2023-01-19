@@ -2,9 +2,13 @@
 import MyButton from "../ui/Button.vue";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+import Realmoji from "./Realmoji.vue";
 
 export default {
-  props: ["postID"],
+  props: ["postID", "realmojis"],
+  components: {
+    Realmoji
+  },
   data() {
     return {
       file: null,
@@ -239,13 +243,21 @@ export default {
     </div>
     <!-- <div>Hi</div> -->
     <div>
-      <select v-model="type">
+      <RealMoji ></RealMoji>
+      <RealMoji></RealMoji>
+      <RealMoji></RealMoji>
+      <RealMoji></RealMoji>
+      <RealMoji></RealMoji>
+      <!--
+      <select v-model="type" class="w-80">
+        <option disabled>Choose Emoji Type to upload</option>
         <option>😃</option>
         <option>😂</option>
         <option>👍</option>
         <option>😮</option>
         <option>😍</option>
       </select>
+      -->
       <MyButton @clickedd="submitRealMoji" :loading="loading">Upload </MyButton>
     </div>
   </div>

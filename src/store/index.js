@@ -210,7 +210,7 @@ const store = createStore({
           commit("error", "Error deleting post");
         }
       });
-    },
+    }
   },
 });
 
