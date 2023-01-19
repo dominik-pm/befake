@@ -52,6 +52,48 @@ app.use(VueGoogleMaps, {
   },
 });
 app.component("font-awesome-icon", FontAwesomeIcon)
-
+app.mixin({
+  methods: {
+      async getSignedUploadURL(type) {
+      const apiURL = `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/${type}/upload-url?mimeType=image%2Fwebp`
+      const headers = {
+        "authorization": `Bearer ${localStorage.getItem("token")}`,  
+        "accept-encoding": "gzip",
+        "user-agent": "okhttp/4.10.0",
+        "if-none-match": 'W/"507-M16WxEgA1LffRgMAGSRIlonfNV8"'
+      };
+      let returnData
+      await fetch(apiURL, {
+        method: "GET",
+        headers: headers
+      })
+      .then(res => res.json())
+      .then(data => {       
+         returnData = data
+      })
+      return returnData
+    },
+    async putFileIntoGoogleStorage(file, response) {
+      let bucket = response.bucket
+      let expireAt = response.expireAt
+      let headers = response.headers
+      this.image.path = response.path
+      let url = response.url
+      fetch(`${this.$store.state.proxyUrl}/${url}`, {
+        method: "PUT",
+        headers,
+        body: file
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
+    }
+  }
+})
+app.config.globalProperties.$type = {
+  realmoji: "realmojis",
+  post: "posts"
+}
 app.mount("#app");
 

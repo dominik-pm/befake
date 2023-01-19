@@ -2,6 +2,7 @@
 import MyButton from "../ui/Button.vue";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
+
 export default {
   props: ["postID"],
   data() {
@@ -11,6 +12,7 @@ export default {
       loading: false,
       image: {},
       user: this.$store.state.user,
+      type: "instant"
     };
   },
   methods: {
@@ -20,109 +22,86 @@ export default {
       this.imageurl = URL.createObjectURL(this.file);
       //   this.$emit("upload", this.file, this.secondary);
     },
-    async uploadPhotoToBeReal(file, secondary) {
-      // https://cdn.bereal.network/Photos/WGpTqIX0diZQu3UjoZE8FnUAzNi2/realmoji/WGpTqIX0diZQu3UjoZE8FnUAzNi2-realmoji-instant-1669332458.webp
-      // upload 2 files
-      // get proxy url from state
+    async uploadPhotoToBeReal(file) {
+      //Smiling realmoji request template
       /*
       PUT https://mobile.bereal.com/api/person/me/realmojis HTTP/2.0
-bereal-platform: android
-bereal-app-language: en
-bereal-device-language: en
-bereal-app-version: 0.61.4
-bereal-os-version: 8.1.0
-bereal-device-id: e8c360e84a94e38e
-bereal-timezone: America/New_York
-x-datadog-trace-id: 68223781230810845
-x-datadog-parent-id: 5367154635491126630
-x-datadog-origin: rum
-x-datadog-sampling-priority: 1
-x-datadog-sampled: 1
-authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3dU5ITVNMUWtrV2dyVGdIRVJ5U3pOU0Jqc1IyIiwidXNlcl9pZCI6Ind1TkhNU0xRa2tXZ3JUZ0hFUnlTek5TQmpzUjIiLCJwaG9uZV9udW1iZXIiOiIrNDM2ODE4MTg0NjcxMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5iZXJlYWwudGVhbS8iLCJhdWQiOiJhbmRyb2lkIiwiaWF0IjoxNjczOTU0OTA1LCJleHAiOjE2NzM5NTg1MDV9.z29a2B8GSVW7D3UfM2hElJJDak0HrRpvRCC441Jl1wQ
-content-type: application/json; charset=utf-8
-content-length: 154
-accept-encoding: gzip
-user-agent: okhttp/4.10.0
+      bereal-platform: android
+      bereal-app-language: en
+      bereal-device-language: en
+      bereal-app-version: 0.61.4
+      bereal-os-version: 8.1.0
+      bereal-device-id: e8c360e84a94e38e
+      bereal-timezone: GMT
+      x-datadog-trace-id: 8599253524156962857
+      x-datadog-parent-id: 1205216895654499725
+      x-datadog-origin: rum
+      x-datadog-sampling-priority: 1
+      x-datadog-sampled: 1
+      authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3dU5ITVNMUWtrV2dyVGdIRVJ5U3pOU0Jqc1IyIiwidXNlcl9pZCI6Ind1TkhNU0xRa2tXZ3JUZ0hFUnlTek5TQmpzUjIiLCJwaG9uZV9udW1iZXIiOiIrNDM2ODE4MTg0NjcxMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5iZXJlYWwudGVhbS8iLCJhdWQiOiJhbmRyb2lkIiwiaWF0IjoxNjc0MTM3NjgwLCJleHAiOjE2NzQxNDEyODB9.J-a6YCj01Pr8-aFo-f9lrMB5fJiyp3zKsfesz8WtAxc
+      content-type: application/json; charset=utf-8
+      content-length: 154
+      accept-encoding: gzip
+      user-agent: okhttp/4.10.0
 
-{"media":{"bucket":"storage.bere.al","path":"Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/Xx6-AiFykwCzlGPu.webp","width":500,"height":500},"emoji":"😂"}
+      {"media":{"bucket":"storage.bere.al","path":"Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/OIpUbA-dR6DAIqzo.webp","width":500,"height":500},"emoji":"😃"}
+      */  
+      //1: GET google signed url
+      /*
+      GET https://mobile.bereal.com/api/content/realmojis/upload-url?mimeType=image%2Fwebp HTTP/2.0
+      bereal-platform: android
+      bereal-app-language: en
+      bereal-device-language: en
+      bereal-app-version: 0.61.4
+      bereal-os-version: 8.1.0
+      bereal-device-id: e8c360e84a94e38e
+      bereal-timezone: GMT
+      x-datadog-trace-id: 4376104791417637882
+      x-datadog-parent-id: 2973318169843754861
+      x-datadog-origin: rum
+      x-datadog-sampling-priority: 1
+      x-datadog-sampled: 1
+      authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3dU5ITVNMUWtrV2dyVGdIRVJ5U3pOU0Jqc1IyIiwidXNlcl9pZCI6Ind1TkhNU0xRa2tXZ3JUZ0hFUnlTek5TQmpzUjIiLCJwaG9uZV9udW1iZXIiOiIrNDM2ODE4MTg0NjcxMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5iZXJlYWwudGVhbS8iLCJhdWQiOiJhbmRyb2lkIiwiaWF0IjoxNjc0MTI4NDE0LCJleHAiOjE2NzQxMzIwMTR9.i4WLRsrsu9HndtBI6Botqv2DlnlsURf1WFkwA86UAFc
+      accept-encoding: gzip
+      user-agent: okhttp/4.10.0
+      if-none-match: W/"507-M16WxEgA1LffRgMAGSRIlonfNV8"
       */
-      console.log("user is ", this.user);
-      const n = `Photos/${this.user.id}/realmoji/${
-        this.user.id
-      }-realmoji-instant-${moment().unix()}.jpg`;
-      console.log(n);
-      const json_data = {
-        cacheControl: "public,max-age=172800",
-        contentType: "image/jpeg",
-        metadata: {
-          type: "instantRealmoji",
-          uid: this.user.id,
-          creationDate: moment().format("ddd MMM D Y HH:mm:ss [GMT+0000]"),
-        },
-        name: n,
-      };
-      const headers = {
-        "x-goog-upload-protocol": "resumable",
-        "x-goog-upload-command": "start",
-        "x-firebase-storage-version": "ios/9.4.0",
-        "x-goog-upload-content-type": "image/jpeg",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "x-goog-upload-content-length": file.size.toString(),
-        "content-type": "application/json",
-        "x-firebase-gmpid": "1:405768487586:ios:28c4df089ca92b89",
-        "user-agent":
-          "AlexisBarreyat.BeReal/0.24.0 iPhone/16.0 hw/iPhone13_2 (GTMSUF/1)",
-      };
-      const params = {
-        uploadType: "resumable",
-        name: n,
-      };
-      const uri = `${
-        this.$store.state.proxyUrl
-      }/https://storage.googleapis.com/v0/b/storage.bere.al/o/${encodeURIComponent(
-        n
-      ).replace(/%20/g, "")}?`;
-      await fetch(uri + new URLSearchParams(params), {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(json_data),
-      }).then(async (res) => {
-        // console log the status code
-        if (res.status !== 200) throw new Error("Failed to upload");
-        const uploadurl =
-          this.$store.state.proxyUrl +
-          "/" +
-          res.headers.get("x-goog-upload-url");
-        const headers2 = {
-          "x-goog-upload-command": "upload, finalize",
-          "x-firebase-storage-version": "ios/9.4.0",
-          "x-firebase-gmpid": "1:405768487586:ios:28c4df089ca92b89",
-          "x-goog-upload-command": "upload, finalize",
-          "x-goog-upload-protocol": "resumable",
-          "x-goog-upload-offset": "0",
-          "content-type": "application/x-www-form-urlencoded",
-          authorization: `Firebase ${localStorage.getItem("token")}`,
-        };
-        await fetch(uploadurl, {
-          method: "POST",
-          headers: headers2,
-          body: file,
-        })
-          .then((res) => {
-            if (res.status !== 200) throw new Error("Failed to upload");
-            return res.json();
-          })
-          .then((data) => {
-            console.log(data);
-            this.image.url = `https://${data.bucket}/${data.name}`;
-            this.image.width = 500;
-            this.image.height = 500;
-            this.image.path = `${data.bucket}/${data.name}`.replace(
-              "storage.bere.al/",
-              ""
-            );
-          });
-      });
+      //2: PUT file into google storage
+      /*
+      PUT https://storage.googleapis.com/storage.bere.al/Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/RcWoVe0kIqnk84Yb.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=prod-backend-fasterstore%40alexisbarreyat-bereal.iam.gserviceaccount.com%2F20230117%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230117T125904Z&X-Goog-Expires=36000&X-Goog-SignedHeaders=cache-control%3Bcontent-type%3Bhost%3Bx-goog-content-length-range&X-Goog-Signature=33a5142ee84d2162875f7e0bd7314e63e6dd888e868e29ea1a0f253d2e9ffaab550698c5a17de7abb68dc4c82beccadc8c4b752e66e57ef1198fd1ba00c49510db06279c8415bb65dc9216f94186454925d4014472a1801acbd581dcd3112536439dac500722d0c33a54350de8c879b668c6bd7ba81af96ab3b21c8eb19fcb6a3115f61984140c619308f23f0afaf19c5ebbe5b4e59e062da4de7859569aab8b5ddfff667d36bb5317a41ea3e4dccadbde091b7a8f655852b1281875afd5534f3fe6876b09d556f0f68c581ea6d1b1ee142e1bcadcb579d479d498b7e306dec9399656060b8499680d6f06d5dbf904063431600bd898b29feb79c9dbb19636ee HTTP/2.0
+      cache-control: public,max-age=2592000
+      x-goog-content-length-range: 1024,1048576
+      content-type: image/webp
+      content-length: 2746
+      body: WEBP
+      */
+      //3: PUT Reaction onto post
+      /*
+      PUT https://mobile.bereal.com/api/content/realmojis/instant?postId=K_d3uokwQYAkP1n-ZIgYA&postUserId=fH8Jk6M3BRRA3FdJco9MkpFCb823 HTTP/2.0
+      bereal-platform: android
+      bereal-app-language: en
+      bereal-device-language: en
+      bereal-app-version: 0.61.4
+      bereal-os-version: 8.1.0
+      bereal-device-id: e8c360e84a94e38e
+      bereal-timezone: GMT
+      x-datadog-trace-id: 2399124126074294684
+      x-datadog-parent-id: 3527205391724013327
+      x-datadog-origin: rum
+      x-datadog-sampling-priority: 1
+      x-datadog-sampled: 1
+      authorization: Bearer #
+      content-type: application/json; charset=utf-8
+      content-length: 165
+      accept-encoding: gzip
+      user-agent: okhttp/4.10.0
+
+      {"media":{"bucket":"storage.bere.al","path":"Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/88k-w7eypgbXjR4lWwczPKTbkeoRDs8vXSo9EOi9RO.webp","width":500,"height":500}}
+      */
+      let response = await this.getSignedUploadURL(this.$type.realmoji)
+      response = response.data
+      await this.putFileIntoGoogleStorage(file, response)
+      
     },
     async submitRealMoji() {
       this.loading = true;
@@ -133,7 +112,8 @@ user-agent: okhttp/4.10.0
         console.log(err);
         return;
       }
-      fetch(
+      if (this.type == "instant") {
+        fetch(
         `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis/instant?postId=${this.postID}&postUserId=${this.user.id}`,
         {
           method: "PUT",
@@ -169,6 +149,46 @@ user-agent: okhttp/4.10.0
           this.loading = false;
           this.$store.commit("error", "Failed to upload");
         });
+      } else {
+        fetch(
+        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me/realmojis`,
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            media: {
+              path: this.image.path,
+              bucket: "storage.bere.al",
+              width: 500,
+              height: 500,
+            },
+            emoji: this.type
+          }),
+        }
+      )
+        .then((res) => {
+          if (res.status !== 200) throw new Error("Failed to upload");
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          console.log(data);
+          this.$store.dispatch("getPosts").then((d) => {
+            this.loading = false;
+            this.file = null;
+            this.imageurl = null;
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.loading = false;
+          this.$store.commit("error", "Failed to upload");
+        });
+      }
+      
     },
   },
 
@@ -219,6 +239,13 @@ user-agent: okhttp/4.10.0
     </div>
     <!-- <div>Hi</div> -->
     <div>
+      <select v-model="type">
+        <option>😃</option>
+        <option>😂</option>
+        <option>👍</option>
+        <option>😮</option>
+        <option>😍</option>
+      </select>
       <MyButton @clickedd="submitRealMoji" :loading="loading">Upload </MyButton>
     </div>
   </div>

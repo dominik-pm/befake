@@ -1,41 +1,10 @@
-/**
- * TODO(developer): Uncomment the following lines before running the sample.
- */
-// The ID of your GCS bucket
- const bucketName = 'storage.bere.al';
-
-// The full path of your file inside the GCS bucket, e.g. 'yourFile.jpg' or 'folder1/folder2/yourFile.jpg'
- const fileName = 'Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/RcWoVe0kIqnk84Yb.webp';
-
-// Imports the Google Cloud client library
-const {Storage} = require('@google-cloud/storage');
-
-// Creates a client
-const storage = new Storage();
-
-async function generateV4UploadSignedUrl() {
-  // These options will allow temporary uploading of the file with outgoing
-  // Content-Type: application/octet-stream header.
-  const options = {
-    version: 'v4',
-    action: 'write',
-    expires: Date.now() + 15 * 60 * 1000, // 15 minutes
-    contentType: 'application/octet-stream',
-  };
-
-  // Get a v4 signed URL for uploading file
-  const [url] = await storage
-    .bucket(bucketName)
-    .file(fileName)
-    .getSignedUrl(options)
-
-  console.log('Generated PUT signed URL:');
-  console.log(url);
-  console.log('You can use this URL with any user agent, for example:');
-  console.log(
-    "curl -X PUT -H 'Content-Type: application/octet-stream' " +
-      `--upload-file my-file '${url}'`
-  );
-}
-
-generateV4UploadSignedUrl().catch(console.error);
+//HOSTNAME + PATH_TO_RESOURCE + "?" + CANONICAL_QUERY_STRING + "&X-Goog-Signature=" + REQUEST_SIGNATURE
+const HOSTNAME = "https://storage.googleapis.com"
+const PATH_TO_RESOURCE = "Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/RcWoVe0kIqnk84Yb.webp"
+const CANONICAL_QUERY_STRING = "?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=prod-backend-fasterstore%40alexisbarreyat-bereal.iam.gserviceaccount.com%2F20230117%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230117T125904Z&X-Goog-Expires=36000&X-Goog-SignedHeaders=cache-control%3Bcontent-type%3Bhost%3Bx-goog-content-length-range"
+var crypto = require('crypto')
+const hash = crypto.createHash('SHA256').update(CANONICAL_QUERY_STRING).digest('hex');
+const REQUEST_SIGNATURE = crypto.sign("SHA256", hash, crypto.createPrivateKey(`-----BEGIN PRIVATE KEY-----
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3dU5ITVNMUWtrV2dyVGdIRVJ5U3pOU0Jqc1IyIiwidXNlcl9pZCI6Ind1TkhNU0xRa2tXZ3JUZ0hFUnlTek5TQmpzUjIiLCJwaG9uZV9udW1iZXIiOiIrNDM2ODE4MTg0NjcxMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5iZXJlYWwudGVhbS8iLCJhdWQiOiJhbmRyb2lkIiwiaWF0IjoxNjczOTY0MjE0LCJleHAiOjE2NzM5Njc4MTR9.jQ9XcgRVeGBC9sawYgP95zMnW-W_h-UgHQfTJDfwykc
+-----END PRIVATE KEY-----`))
+console.log(REQUEST_SIGNATURE)

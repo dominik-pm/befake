@@ -10,6 +10,11 @@ import UploadPost from "../components/posts/uploadPost.vue";
 import { mapState } from "vuex";
 import UploadProfilePicture from "../components/posts/uploadProfilePicture.vue";
 export default {
+  data() {
+    return {
+      realmojis: {}
+    }
+  },
   components: {
     singlePostComponentVue,
     PulseLoader,
@@ -102,7 +107,7 @@ export default {
     v-for="post in posts"
     v-if="!isfetch"
     class="flex flex-col justify-center items-center dark:text-white">
-    <single-post-component-vue :post="post" class="mt-10" />
+    <single-post-component-vue :post="post" :realmojis="realmojis" class="mt-10" />
   </div>
   <div v-else class="grid h-screen place-items-center">
     <pulse-loader color="white"></pulse-loader>

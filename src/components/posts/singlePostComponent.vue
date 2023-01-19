@@ -7,7 +7,7 @@ import MyInput from "../ui/Input.vue";
 import UploadRealmoji from "./uploadRealmoji.vue";
 import Realmoji from "./Realmoji.vue";
 export default defineComponent({
-  props: ["post"],
+  props: ["post", "realmojis"],
   data() {
     return {
       iframesrc: this.post.location
@@ -246,6 +246,9 @@ export default defineComponent({
           </div>
           <div v-else>
             <Realmoji v-for="e in post.realMojis" :key="e.id" :realmoji="e" />
+          </div>
+          <div class="flex flex-col">
+            <!--SHOW OWN REALMOJIS-->
           </div>
 
           <UploadRealmoji :postID="post.id" />

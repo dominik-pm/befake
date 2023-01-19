@@ -83,12 +83,12 @@ export default {
             to="/about">
             About
           </router-link>
-          <router-link
+          <a
             class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
             @click="this.$store.commit('logout')"
             v-if="this.$store.state.loggedIn">
             Logout
-          </router-link>
+        </a>
           <div class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
             <div>
               <router-link to="allfriendposts">Posts from friends!</router-link>
