@@ -30,5 +30,4 @@ coverage
 .firebase
 
 package-lock.json
-package.json
 yarn.lock
