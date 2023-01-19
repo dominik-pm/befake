@@ -24,6 +24,28 @@ export default {
       // https://cdn.bereal.network/Photos/WGpTqIX0diZQu3UjoZE8FnUAzNi2/realmoji/WGpTqIX0diZQu3UjoZE8FnUAzNi2-realmoji-instant-1669332458.webp
       // upload 2 files
       // get proxy url from state
+      /*
+      PUT https://mobile.bereal.com/api/person/me/realmojis HTTP/2.0
+bereal-platform: android
+bereal-app-language: en
+bereal-device-language: en
+bereal-app-version: 0.61.4
+bereal-os-version: 8.1.0
+bereal-device-id: e8c360e84a94e38e
+bereal-timezone: America/New_York
+x-datadog-trace-id: 68223781230810845
+x-datadog-parent-id: 5367154635491126630
+x-datadog-origin: rum
+x-datadog-sampling-priority: 1
+x-datadog-sampled: 1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ3dU5ITVNMUWtrV2dyVGdIRVJ5U3pOU0Jqc1IyIiwidXNlcl9pZCI6Ind1TkhNU0xRa2tXZ3JUZ0hFUnlTek5TQmpzUjIiLCJwaG9uZV9udW1iZXIiOiIrNDM2ODE4MTg0NjcxMyIsImlzcyI6Imh0dHBzOi8vYXV0aC5iZXJlYWwudGVhbS8iLCJhdWQiOiJhbmRyb2lkIiwiaWF0IjoxNjczOTU0OTA1LCJleHAiOjE2NzM5NTg1MDV9.z29a2B8GSVW7D3UfM2hElJJDak0HrRpvRCC441Jl1wQ
+content-type: application/json; charset=utf-8
+content-length: 154
+accept-encoding: gzip
+user-agent: okhttp/4.10.0
+
+{"media":{"bucket":"storage.bere.al","path":"Photos/wuNHMSLQkkWgrTgHERySzNSBjsR2/realmoji/Xx6-AiFykwCzlGPu.webp","width":500,"height":500},"emoji":"😂"}
+      */
       console.log("user is ", this.user);
       const n = `Photos/${this.user.id}/realmoji/${
         this.user.id

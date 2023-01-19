@@ -38,7 +38,7 @@ export default {
       <div class="flex justify-between flex-col sm:flex-row items-center">
         <div>
           <!-- logo -->
-          <a
+          <router-link
             class="flex items-center cursor-pointer"
             v-clipboard:copy="copy"
             href="/">
@@ -46,16 +46,16 @@ export default {
               src="../../assets/favicon.ico"
               class="h-12 w-12 rounded-full object-cover mr-2" />
             <span class="text-3xl font-bold">BeFake</span>
-          </a>
+          </router-link>
         </div>
-        <a
+        <router-link
           href="#"
           @click="hideNavbar = !hideNavbar"
           class="absolute top-[0.75rem] right-[1rem] sm:hidden flex flex-col justify-between w-[30px] h-[21px]">
           <span class="h-[3px] w-[100%] bg-white rounded-lg"></span>
           <span class="h-[3px] w-[100%] bg-white rounded-lg"></span>
           <span class="h-[3px] w-[100%] bg-white rounded-lg"></span>
-        </a>
+        </router-link>
         <!-- links -->
         <div
           class="items-center space-x-2 flex flex-col sm:flex sm:flex-row p-[.5rem]"
@@ -73,25 +73,25 @@ export default {
             href="https://ko-fi.com/rahulvaidun">
             Donate
           </a>
-          <a
+          <router-link
             class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
             href="/map">
             Map
-          </a>
-          <a
+          </router-link>
+          <router-link
             class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
             href="/about">
             About
-          </a>
-          <a
+          </router-link>
+          <router-link
             class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold"
             @click="this.$store.commit('logout')"
             v-if="this.$store.state.loggedIn">
             Logout
-          </a>
+          </router-link>
           <div class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
             <div>
-              <a href="allfriendposts">Posts from friends!</a>
+              <router-link href="allfriendposts">Posts from friends!</router-link>
             </div>
           </div>
         </div>
