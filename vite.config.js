@@ -24,4 +24,7 @@ export default defineConfig({
       "console.trace",
     ],
   },
+  build: {
+    outDir: "backend/dist"
+  }
 });
