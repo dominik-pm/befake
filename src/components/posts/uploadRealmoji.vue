@@ -66,7 +66,7 @@ user-agent: okhttp/4.10.0
         "x-goog-upload-command": "start",
         "x-firebase-storage-version": "ios/9.4.0",
         "x-goog-upload-content-type": "image/jpeg",
-        Authorization: `Firebase ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "x-goog-upload-content-length": file.size.toString(),
         "content-type": "application/json",
         "x-firebase-gmpid": "1:405768487586:ios:28c4df089ca92b89",
@@ -79,7 +79,7 @@ user-agent: okhttp/4.10.0
       };
       const uri = `${
         this.$store.state.proxyUrl
-      }/https://firebasestorage.googleapis.com/v0/b/storage.bere.al/o/${encodeURIComponent(
+      }/https://storage.googleapis.com/v0/b/storage.bere.al/o/${encodeURIComponent(
         n
       ).replace(/%20/g, "")}?`;
       await fetch(uri + new URLSearchParams(params), {
