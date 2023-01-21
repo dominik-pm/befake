@@ -260,9 +260,9 @@ export default {
 };
 </script>
 <template>
-  <div class="flex items-center gap-3">
+  <div class="flex items-center gap-3 flex-row flex-wrap">
     <!-- <div>Hi</div> -->
-    <div class="flex flex-row flex-wrap" v-for="(emoji, index) of emojis">
+    <div class="flex" v-for="(emoji, index) of emojis">
       <Realmoji :postID="postID" @fileChanged="(e, moji) => onFileChanged(e, moji)" :file="emoji.file" :imageurl="emoji.imageurl" :emoji="emoji.emoji" @clicked=" () => reactRealmoji(realmojis.find(element => element.emoji == emoji.emoji))" :realmoji="realmojis.find(element => element.emoji == emoji.emoji)" :own="true"></Realmoji>
       <!--
       <div v-for="(realmoji, index) in realmojis"> 
