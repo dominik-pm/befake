@@ -1,30 +1,75 @@
 <script>
 import MyButton from "../ui/Button.vue";
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
 import Realmoji from "./Realmoji.vue";
-
+// FIND REALMOJI PATH AND URL DIFFERENCES SYNTAX
 export default {
+  //realmojis are the own realmojis
   props: ["postID", "realmojis"],
   data() {
     return {
-      file: null,
-      imageurl: null,
       loading: false,
-      image: {},
       user: this.$store.state.user,
-      type: "instant"
+      emojis: {
+        "👍": {
+          emoji: "👍",
+          imageurl: null,
+          file: null,
+          media: {
+            path: null
+          }
+        }, 
+        "😃": {
+          emoji: "😃",
+          imageurl: null,
+          file: null,
+          media: {
+            path: null
+          }
+        },
+        "😂": {
+          emoji: "😂",
+          imageurl: null,
+          file: null,
+          media: {
+            path: null
+          }
+        }, 
+        "😲": {
+          emoji: "😲",
+          imageurl: null,
+          file: null,
+          media: {
+            path: null
+          }
+        }, 
+        "😍": {
+          emoji: "😍",
+          imageurl: null,
+          file: null,
+          media: {
+            path: null
+          }
+        },
+        "⚡": {
+          emoji: "⚡",
+          imageurl: null,
+          file: null,
+          media: {
+            path: null
+          }
+          
+        },
+      }
     };
   },
   methods: {
-    onFileChange(e) {
-      console.log(e);
-      this.file = e.target.files[0];
-      this.imageurl = URL.createObjectURL(this.file);
-      //   this.$emit("upload", this.file, this.secondary);
+    onFileChanged(e, emoji) {
+      this.emojis[emoji].file = e.target.files[0]
+      this.emojis[emoji].imageurl = URL.createObjectURL(this.emojis[emoji].file)
+      console.log(this.emojis[emoji].imageurl)
     },
-    async uploadPhotoToBeReal(file) {
-      //Smiling realmoji request template
+    async setRealmoji(file, emoji) {
+      //save smiling realmoji request template
       /*
       PUT https://mobile.bereal.com/api/person/me/realmojis HTTP/2.0
       bereal-platform: android
@@ -102,36 +147,30 @@ export default {
       let response = await this.getSignedUploadURL(this.$type.realmoji)
       response = response.data
       await this.putFileIntoGoogleStorage(file, response)
-      
-    },
-    async submitRealMoji(uploadToStorage = true, realmoji = null) {
+
+      let imagePath = response.path
+      this.emojis[emoji].media.path = imagePath
       this.loading = true;
-      console.log(this.postID);
-      if (uploadToStorage) {
-        try {
-          await this.uploadPhotoToBeReal(this.file);
-        } catch (err) {
-          console.log(err);
-          return;
-        }
-      }
-     
-      if (realmoji == null) {
+
+      if (emoji != "⚡") {
         fetch(
-        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis/instant?postId=${this.postID}&postUserId=${this.user.id}`,
+        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me/realmojis`,
         {
           method: "PUT",
           headers: {
-            "content-type": "application/json",
+            "content-type": "application/json; charset=utf-8",
             authorization: `Bearer ${localStorage.getItem("token")}`,
+            "accept-encoding": "gzip",
+            "user-agent": "okhttp/4.10.0"
           },
           body: JSON.stringify({
             media: {
-              path: this.image.path,
+              path: imagePath != null ? imagePath : realmoji.media.url.substring(realmoji.media.url.search("Photos")),
               bucket: "storage.bere.al",
               width: 500,
               height: 500,
             },
+            "emoji": emoji
           }),
         }
       )
@@ -144,8 +183,6 @@ export default {
           console.log(data);
           this.$store.dispatch("getPosts").then((d) => {
             this.loading = false;
-            this.file = null;
-            this.imageurl = null;
           });
         })
         .catch((err) => {
@@ -154,78 +191,68 @@ export default {
           this.$store.commit("error", "Failed to upload");
         });
       } else {
-        fetch(
-        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis?postId=${this.postID}&postUserId=${this.user.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "content-type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            emoji: realmoji.emoji
-          }),
-        }
-      )
-        .then((res) => {
-          if (res.status !== 200) throw new Error("Failed to upload");
-          return res.json();
-        })
-        .then((data) => {
-          console.log(data);
-          console.log(data);
-          this.$store.dispatch("getPosts").then((d) => {
-            this.loading = false;
-            this.file = null;
-            this.imageurl = null;
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-          this.$store.commit("error", "Failed to upload");
-        });
-      }
+        this.reactRealmoji(this.emojis["⚡"])
+      } 
       
     },
-    async setRealMoji() {
-      fetch(
-        `${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me/realmojis`,
-        {
+    async reactRealmoji(realmoji) {
+      
+      if (realmoji.emoji == "⚡") {
+        fetch(`${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis/instant?postId=${this.postID}&postUserId=${this.user.id}`, {
           method: "PUT",
           headers: {
             "content-type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
+            authorization: `Bearer ${localStorage.getItem("token")}`
           },
           body: JSON.stringify({
             media: {
-              path: this.image.path != null ? this.image.path : realmoji.media.url.substring(realmoji.media.url.search("Photos")),
               bucket: "storage.bere.al",
+              path: realmoji.media.path,
               width: 500,
-              height: 500,
-            },
+              height: 500
+            }
+          })
+        })
+        .then(res => {
+          if (res.status == 200) {
+            this.$store.dispatch("getPosts").then((d) => {
+              this.loading = false;
+            });
+          }
+        })
+      } else {
+        console.log(realmoji.emoji)
+        fetch(`${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/content/realmojis?postId=${this.postID}&postUserId=${this.user.id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify({
             emoji: realmoji.emoji
-          }),
+          })
+        }).then(res => {
+          if (res.status == 200) {
+            this.$store.dispatch("getPosts").then((d) => {
+              this.loading = false;
+            });
+          }
+        })
+      }
+
+    },
+    async setRealmojis() {
+      for (let key in this.emojis) {
+        
+        if (this.emojis[key].file != null) {
+          
+          await this.setRealmoji(this.emojis[key].file, this.emojis[key].emoji)
         }
-      )
-        .then((res) => {
-          if (res.status !== 200) throw new Error("Failed to upload");
-          return res.json();
-        })
-        .then((data) => {
-          console.log(data);
-          console.log(data);
-          this.$store.dispatch("getPosts").then((d) => {
+      }
+      this.$store.dispatch("getPosts").then((d) => {
+        console.log("gotposts")
             this.loading = false;
-            this.file = null;
-            this.imageurl = null;
           });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-          this.$store.commit("error", "Failed to upload");
-        });
     }
   },
 
@@ -235,13 +262,8 @@ export default {
 <template>
   <div class="flex items-center gap-3">
     <!-- <div>Hi</div> -->
-    <div class="flex flex-row flex-wrap">
-      <Realmoji :emoji="'👍'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '👍'))" :realmoji="realmojis.find(element => element.emoji == '👍')" :own="true"></Realmoji>
-      <Realmoji :emoji="'😃'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😃'))" :realmoji="realmojis.find(element => element.emoji == '😃')" :own="true"></Realmoji>
-      <Realmoji :emoji="'😂'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😂'))" :realmoji="realmojis.find(element => element.emoji == '😂')" :own="true"></Realmoji>
-      <Realmoji :emoji="'😮'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😮'))" :realmoji="realmojis.find(element => element.emoji == '😮')" :own="true"></Realmoji>
-      <Realmoji :emoji="'😍'" @clicked=" () => submitRealMoji(false, realmojis.find(element => element.emoji == '😍'))" :realmoji="realmojis.find(element => element.emoji == '😍')" :own="true"></Realmoji>
-
+    <div class="flex flex-row flex-wrap" v-for="(emoji, index) of emojis">
+      <Realmoji :postID="postID" @fileChanged="(e, moji) => onFileChanged(e, moji)" :file="emoji.file" :imageurl="emoji.imageurl" :emoji="emoji.emoji" @clicked=" () => reactRealmoji(realmojis.find(element => element.emoji == emoji.emoji))" :realmoji="realmojis.find(element => element.emoji == emoji.emoji)" :own="true"></Realmoji>
       <!--
       <div v-for="(realmoji, index) in realmojis"> 
         <Realmoji @clicked=" () => submitRealMoji(false, realmoji)" :realmoji="realmoji" :own="true"></Realmoji>
@@ -257,6 +279,8 @@ export default {
           <option>😍</option>
         </select>
         -->
+      </div>
+      <!--
       <div>
         <label :for="postID">
           <div
@@ -300,7 +324,7 @@ export default {
           </div>
         </label>
       </div>
-        <MyButton @clickedd="submitRealMoji" :loading="loading">Upload </MyButton>
+      -->
+        <MyButton @clickedd="setRealmojis" :loading="loading">Upload </MyButton>
     </div>
-  </div>
 </template>
