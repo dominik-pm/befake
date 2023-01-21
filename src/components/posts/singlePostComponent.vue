@@ -21,7 +21,9 @@ export default defineComponent({
       hideSecondaryPhoto: false,
       isOwner: false,
       showEmojis: false,
-      colCount: 4
+      colCount: 4,
+      realmojisReactive: []
+
     };
   },
   methods: {
@@ -81,7 +83,7 @@ export default defineComponent({
         color += letters[this.post.user.username.charCodeAt(i) % 16];
       }
       return color;
-    },
+    }
   },
   async beforeMount() {
     if (this.post.location) {
@@ -100,6 +102,10 @@ export default defineComponent({
     if (this.$store.state.user.id === this.post.ownerID) {
       this.isOwner = true;
     }
+  },
+  mounted() {
+    this.realmojisReactive.push(this.post.realMojis.slice(0, this.colCount))
+    this.realmojisReactive.push(this.post.realMojis)
   },
   components: { GoogleMapsModal, MyButton, MyInput, UploadRealmoji, Realmoji },
 });
@@ -162,7 +168,7 @@ export default defineComponent({
           <!-- Add trash icon -->
           <img
             class="fill-white cursor-pointer"
-            @click="this.$store.dispatch('deletePost')"
+            @click="$store.dispatch('deletePost')"
             v-if="isOwner"
             src="../../assets/icons8-trash-can.svg" />
         </div>
@@ -213,17 +219,17 @@ export default defineComponent({
       </div>
       <div class="text-center mt-4">
         <div class="flex flex-col mt-4 w-[100%]">
-          <div v-if="this.post.realMojis.length > colCount">
+          <div v-if="post.realMojis.length > colCount">
             <div :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
               <Realmoji
-                v-for="e in post.realMojis.slice(0, this.colCount)"
+                v-for="e in post.realMojis.slice(0, colCount)"
                 :key="e.id"
                 :realmoji="e" />
             </div>
             <Transition name="slide">
               <div v-if="showEmojis" :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
                 <Realmoji
-                  v-for="e in post.realMojis.slice(this.colCount)"
+                  v-for="e in post.realMojis.slice(colCount)"
                   :key="e.id"
                   :realmoji="e" />
               </div>
@@ -235,9 +241,9 @@ export default defineComponent({
                 {{
                   (showEmojis ? "Hide" : "Show") +
                   " " +
-                  (this.post.realMojis.length - this.colCount) +
+                  (post.realMojis.length - colCount) +
                   " " +
-                  (this.post.realMojis.length - this.colCount == 1
+                  (post.realMojis.length - colCount == 1
                     ? "realmoji"
                     : "realmojis")
                 }}
