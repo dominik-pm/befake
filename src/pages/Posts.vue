@@ -68,6 +68,7 @@ export default {
       .then(() => {
         console.log("in then 62");
         this.isfetch = false;
+        this.realmojis = this.$store.state.user.realmojis
       })
       .catch((err) => {
         console.log(err);
@@ -84,6 +85,7 @@ export default {
       friends: [],
       memories: [],
       isfetch: true,
+      realmojis: []
     };
   },
   methods: {
@@ -107,7 +109,7 @@ export default {
       posts: (state) => state.posts,
       // userPosted: (state) => state.userPosted,
     }),
-  },
+  }
 };
 </script>
 <template>

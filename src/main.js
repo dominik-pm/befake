@@ -77,7 +77,7 @@ app.mixin({
       let bucket = response.bucket
       let expireAt = response.expireAt
       let headers = response.headers
-      this.image.path = response.path
+      let imagePath = response.path
       let url = response.url
       fetch(`${this.$store.state.proxyUrl}/${url}`, {
         method: "PUT",
