@@ -24,7 +24,7 @@ export default {
 </script>
 <template>
   <div class="relative mr-6">
-    <div v-if="ownData == false" class="flex items-center mb-2">
+    <div v-if="ownData == false" class="flex items-center m-auto mb-2">
       <div>
         <img
           referrerpolicy="no-referrer"
@@ -35,7 +35,7 @@ export default {
           >{{ realmojiData.emoji }}
         </span>
       </div>
-      <span class="font-bold ml-4 mr-4">{{ realmojiData.userName }}</span>
+      <span v-if="realmojiData.userName != ''" class="font-bold ml-4 mr-4">{{ realmojiData.userName }}</span>
     </div>
   <div v-else-if="realmojiData != null">
     <button @click="$emit('clicked')">
@@ -45,7 +45,7 @@ export default {
         class="w-24 rounded-[50%]" />
     </button>
 
-      <span class="absolute top-[50px] left-[60px] text-5xl"
+      <span v-if="realmojiData.emoji != ''" class="absolute top-[50px] left-[60px] text-5xl"
         >{{ realmojiData.emoji }}
       </span>
   </div>
