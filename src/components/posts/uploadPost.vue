@@ -40,7 +40,7 @@ export default {
         let response = await this.getSignedUploadURL(this.$type.post)
         response = response.data
         await this.putFileIntoGoogleStorage(this.primary.file, response["0"])
-        await this.putFileIntoGoogleStorage(this.secondary.fil, response["1"])
+        await this.putFileIntoGoogleStorage(this.secondary.file, response["1"])
 
         imagePath1 = response["0"].path
         imagePath2 = response["1"].path
