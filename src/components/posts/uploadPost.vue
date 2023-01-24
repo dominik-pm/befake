@@ -32,19 +32,25 @@ export default {
         this.primary.file = file;
       }
     },
-    async uploadPhotoToBeReal(file, secondary) {
-      // upload 2 files
-      let response = await this.getSignedUploadURL(this.$type.post)
-      response = response.data
-      await this.putFileIntoGoogleStorage(response)
-    },
     async submitPost() {
       this.loading = true;
+      let imagePath1 = ""
+      let imagePath2 = ""
       try {
-        await this.uploadPhotoToBeReal(this.primary.file, false);
-        await this.uploadPhotoToBeReal(this.secondary.file, true);
+        let response = await this.getSignedUploadURL(this.$type.post)
+        response = response.data
+        await this.putFileIntoGoogleStorage(this.primary.file, response["0"])
+        await this.putFileIntoGoogleStorage(this.secondary.fil, response["1"])
+
+        imagePath1 = response["0"].path
+        imagePath2 = response["1"].path
+        this.primary.width = 1500
+        this.primary.height = 2000
+        this.secondary.width = 1500
+        this.secondary.height = 2000
       } catch (e) {
         this.loading = false;
+        console.log(e)
       }
       const nowt = moment();
       // moment to date string
@@ -60,13 +66,13 @@ export default {
           bucket: "storage.bere.al",
           height: this.primary.height,
           width: this.primary.width,
-          path: this.primary.url.replace("https://storage.bere.al/", ""),
+          path: imagePath1,
         },
         frontCamera: {
           bucket: "storage.bere.al",
           height: this.secondary.height,
           width: this.secondary.width,
-          path: this.secondary.url.replace("https://storage.bere.al/", ""),
+          path: imagePath2,
         },
       };
       if (this.location.postwithlocation) {
