@@ -106,6 +106,7 @@ export default defineComponent({
   mounted() {
     this.realmojisReactive.push(this.post.realMojis.slice(0, this.colCount))
     this.realmojisReactive.push(this.post.realMojis)
+    console.log(this.post)
   },
   components: { GoogleMapsModal, MyButton, MyInput, UploadRealmoji, Realmoji },
 });
@@ -223,14 +224,14 @@ export default defineComponent({
             <div :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
               <Realmoji
                 v-for="e in post.realMojis.slice(0, colCount)"
-                :key="e.id"
+                :key="e.type"
                 :realmoji="e" />
             </div>
             <Transition name="slide">
               <div v-if="showEmojis" :class="'grid gap-' + colCount + ' grid-columns-' + colCount">
                 <Realmoji
                   v-for="e in post.realMojis.slice(colCount)"
-                  :key="e.id"
+                  :key="e.type"
                   :realmoji="e" />
               </div>
             </Transition>
@@ -251,7 +252,7 @@ export default defineComponent({
             </div>
           </div>
           <div v-else>
-            <Realmoji v-for="e in post.realMojis" :key="e.id" :realmoji="e" />
+            <Realmoji v-for="e in post.realMojis" :key="e.type" :realmoji="e" />
           </div>
 
           <UploadRealmoji :realmojis="realmojis" :postID="post.id" />
