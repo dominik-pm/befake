@@ -53,6 +53,10 @@ export default {
                 url2: "https://media.discordapp.net/attachments/765996355696197643/1063871933386600448/image.png",
                 date: new Date()
             })
+        },
+        getDateFormatted(post) {
+            let date = new Date(post.date)
+            return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         }
     },
     mounted() {
@@ -70,13 +74,13 @@ export default {
             <h1 class="inline-block mr-5">{{ userName }}</h1>
             <font-awesome-icon icon="fa-arrow-down" size="2x" />
         </button>
-        <div class="collapse overflow-y-scroll" v-bind:id="'collapse' + userName.replaceAll('.','')">
+        <div class="collapse" v-bind:id="'collapse' + userName.replaceAll('.','')">
             <div class="flex flex-wrap flex-row m-auto justify-center">
                 <RealMoji v-for="(realmoji, index) in realmojis" :realmoji="{uri: realmoji.url, emoji: '', userName: ''}"/>
             </div>
             <ul v-for="(post, index) of posts">
                 <li class="rounded-lg border-4">
-                    <h3 class="text-center mb-8">{{post.date}}</h3>
+                    <h2 class="text-center mb-8 mt-8">{{getDateFormatted(post)}}</h2>
                     <img :src="post.url1" class="m-auto mb-8">
                     <img :src="post.url2" class="m-auto mb-8">
                 </li>
@@ -89,6 +93,9 @@ export default {
 <style>
 h1 {
     font-size: xx-large !important;
+}
+h2 {
+    font-size: x-large !important;
 }
 img {
     max-height: 500px;
