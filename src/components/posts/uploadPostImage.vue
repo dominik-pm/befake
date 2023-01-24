@@ -19,7 +19,7 @@ export default {
 </script>
 <template>
   <div class="border-2 border-white w-[350px] h-[485px] text-center flex align-center">
-    <input class="m-auto" type="file" @change="onFileChange" />
+    <input class="m-auto" type="file" accept="image/*" @change="onFileChange" />
     <div>
       <img :src="imageurl" v-if="imageurl" />
     </div>
