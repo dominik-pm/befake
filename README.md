@@ -1,5 +1,10 @@
 # BeFake
 
+# NEW FEATURES
+
+1. Upload realmojis
+2. Upload profile pictures
+
 [https://www.befake.fr](https://www.befake.fr)
 
 ## Features
