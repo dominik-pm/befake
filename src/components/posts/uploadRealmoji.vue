@@ -1,10 +1,9 @@
 <script>
 import MyButton from "../ui/Button.vue";
 import Realmoji from "./Realmoji.vue";
-// FIND REALMOJI PATH AND URL DIFFERENCES SYNTAX
+
 export default {
-  //realmojis are the own realmojis
-  props: ["postID", "realmojis"],
+  props: ["postID", "ownRealmojis"],
   data() {
     return {
       loading: false,
@@ -188,7 +187,7 @@ export default {
   <div class="flex items-center gap-3 flex-row flex-wrap">
     <!-- <div>Hi</div> -->
     <div class="flex" v-for="(emoji, index) of emojis">
-      <Realmoji :postID="postID" @fileChanged="(e, moji) => onFileChanged(e, moji)" :file="emoji.file" :imageurl="emoji.imageurl" :emoji="emoji.emoji" @clicked=" () => reactRealmoji(realmojis.find(element => element.emoji == emoji.emoji))" :realmoji="realmojis.find(element => element.emoji == emoji.emoji)" :own="true"></Realmoji>
+      <Realmoji :postID="postID" @fileChanged="(e, moji) => onFileChanged(e, moji)" :file="emoji.file" :imageurl="emoji.imageurl" :emoji="emoji.emoji" @clicked=" () => reactRealmoji(ownRealmojis.find(element => element.emoji == emoji.emoji))" :realmoji="ownRealmojis.find(element => element.emoji == emoji.emoji)" :own="true"></Realmoji>
       <!--
       <div v-for="(realmoji, index) in realmojis"> 
         <Realmoji @clicked=" () => submitRealMoji(false, realmoji)" :realmoji="realmoji" :own="true"></Realmoji>

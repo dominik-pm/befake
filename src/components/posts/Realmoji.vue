@@ -11,11 +11,11 @@ export default {
   props: ["file", "imageurl", "realmoji", "own", "emoji", "postID"],
   created() {
     this.realmojiData = this.realmoji
-    try {
+    if (this.realmojiData.media) {
       this.realmojiData.uri = this.realmojiData.media.url
-    } catch (error) {
-      
     }
+    
+
     
     this.ownData = this.own == undefined ? false : true
     this.emojiData = this.emoji
