@@ -15,7 +15,8 @@ export default {
         return {
             posts: [],
             realmojis: [],
-            fetched: false
+            fetched: false,
+            profilePictures: []
         }
     },
     methods: {
@@ -46,6 +47,7 @@ export default {
         loadInformation() {
             this.loadRealmojis()
             this.loadPosts()
+            this.loadProfilePictures()
         },
         loadPostsDummy() {
             this.posts.push({
@@ -57,6 +59,15 @@ export default {
         getDateFormatted(post) {
             let date = new Date(post.date)
             return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+        },
+        loadProfilePictures() {
+            fetch(
+                `${config.apiURL}/getProfilePicturesByUsername/${this.userName}`
+                )
+                .then((response) => response.json())
+                .then((data) => {
+                    this.profilePictures = data
+                })
         }
     },
     mounted() {
@@ -75,9 +86,12 @@ export default {
             <font-awesome-icon icon="fa-arrow-down" size="2x" />
         </button>
         <div class="collapse" v-bind:id="'collapse' + userName.replaceAll('.','')">
+            <h2>Realmojis</h2>
             <div class="flex flex-wrap flex-row m-auto justify-center">
                 <RealMoji v-for="(realmoji, index) in realmojis" :realmoji="{uri: realmoji.url, emoji: '', userName: ''}"/>
             </div>
+            <h2>Profile Pictures</h2>
+            <img class="m-auto mb-5" v-for="(picture, index) in profilePictures" :src="picture.url">
             <ul v-for="(post, index) of posts">
                 <li class="rounded-lg border-4">
                     <h2 class="text-center mb-8 mt-8">{{getDateFormatted(post)}}</h2>
