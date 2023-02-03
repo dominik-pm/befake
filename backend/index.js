@@ -1,6 +1,8 @@
 var fs = require('fs');
 var http = require('http')
 var https = require('https')
+var config = require('./../src/data/config.js')
+
 try {
   var privateKey  = fs.readFileSync('/etc/ssl/private/key.pem', 'utf8');
   var certificate = fs.readFileSync('/etc/ssl/private/cert.pem', 'utf8');
@@ -44,11 +46,12 @@ try {
   
 }
 
+
 cors.createServer({
   originWhitelist: [],
   requireHeader: ['origin', 'x-requested-with'],
   removeHeaders: ['cookie', 'cookie2']
-}).listen(10002, "0.0.0.0", function() {
+}).listen(10002, config.server ?  "https://144.91.82.153" : "0.0.0.0", function() {
   console.log("CORS Anywhere server started...")
 })
 httpServer.listen(9999);
