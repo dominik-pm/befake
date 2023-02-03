@@ -4,6 +4,4 @@ var data = {
     server: false
 }
 
-export default data
-
 module.exports = data
