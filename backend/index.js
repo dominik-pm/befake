@@ -1,9 +1,16 @@
 var fs = require('fs');
 var http = require('http')
 var https = require('https')
-var privateKey  = fs.readFileSync('/etc/ssl/private/key.pem', 'utf8');
-var certificate = fs.readFileSync('/etc/ssl/private/cert.pem', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
+try {
+  var privateKey  = fs.readFileSync('/etc/ssl/private/key.pem', 'utf8');
+  var certificate = fs.readFileSync('/etc/ssl/private/cert.pem', 'utf8');
+  var credentials = {key: privateKey, cert: certificate};
+} catch (error) {
+  console.log(error) 
+}
+
+var cors = require('cors-anywhere');
+
 
 // create a new express app
 const express = require("express");
@@ -31,7 +38,20 @@ app.get("/*", (req, res) => {
 }); // listen on port 3000
 
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+try {
+  var httpsServer = https.createServer(credentials, app);
+} catch (error) {
+  
+}
 
+cors.createServer({
+  originWhitelist: [],
+  requireHeader: ['origin', 'x-requested-with'],
+  removeHeaders: ['cookie', 'cookie2']
+}).listen(8080, "localhost", function() {
+  console.log("CORS Anywhere server started...")
+})
 httpServer.listen(9999);
 httpsServer.listen(10001);
+
+

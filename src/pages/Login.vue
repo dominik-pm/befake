@@ -105,7 +105,7 @@ export default {
             "user-agent":
               "FirebaseAuth.iOS/8.15.0 AlexisBarreyat.BeReal/0.22.4 iPhone/14.7.1 hw/iPhone9_1",
             "x-firebase-locale": "en",
-          },
+          }, 
           body: JSON.stringify({
             phoneNumber: this.cc + this.phone,
             iosReceipt:

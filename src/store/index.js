@@ -3,7 +3,7 @@ import { event } from "vue-gtag";
 const store = createStore({
   state() {
     return {
-      proxyUrl: "https://warm-scrubland-06418.herokuapp.com",
+      proxyUrl: "http://localhost:8080", //"https://warm-scrubland-06418.herokuapp.com",
       // proxyUrl: "http://localhost:8080",
       loggedIn: localStorage.getItem("token") ? true : false,
       posts: [],

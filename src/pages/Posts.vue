@@ -72,8 +72,8 @@ export default {
       })
       .catch((err) => {
         console.log(err);
-        localStorage.clear();
-        this.$store.commit("logout");
+        //localStorage.clear();
+        //this.$store.commit("logout");
         this.$store.commit("error", "Something went wrong while getting posts");
       });
   },
