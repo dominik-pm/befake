@@ -48,7 +48,7 @@ cors.createServer({
   originWhitelist: [],
   requireHeader: ['origin', 'x-requested-with'],
   removeHeaders: ['cookie', 'cookie2']
-}).listen(8080, "localhost", function() {
+}).listen(10002, "0.0.0.0", function() {
   console.log("CORS Anywhere server started...")
 })
 httpServer.listen(9999);

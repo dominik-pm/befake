@@ -1,9 +1,11 @@
 import { createStore } from "vuex";
 import { event } from "vue-gtag";
+import config from "./../data/config.js";
+
 const store = createStore({
   state() {
     return {
-      proxyUrl: "http://localhost:8080", //"https://warm-scrubland-06418.herokuapp.com",
+      proxyUrl: config.server ? "https://144.91.82.153:10002" : "http://localhost:10002" , //"https://warm-scrubland-06418.herokuapp.com",
       // proxyUrl: "http://localhost:8080",
       loggedIn: localStorage.getItem("token") ? true : false,
       posts: [],
