@@ -42,18 +42,23 @@ app.get("/*", (req, res) => {
 var httpServer = http.createServer(app);
 try {
   var httpsServer = https.createServer(credentials, app);
+
+  cors.createServer({
+    originWhitelist: [],
+    requireHeader: ['origin', 'x-requested-with'],
+    removeHeaders: ['cookie', 'cookie2'],
+    privateKey, 
+    certificate,
+    credentials
+  }).listen(10002, config.server ?  "https://144.91.82.153" : "0.0.0.0", function() {
+    console.log("CORS Anywhere server started...")
+  }, )
 } catch (error) {
-  
+  console.log("couldnt start https cors server...")
 }
 
 
-cors.createServer({
-  originWhitelist: [],
-  requireHeader: ['origin', 'x-requested-with'],
-  removeHeaders: ['cookie', 'cookie2']
-}).listen(10002, config.server ?  "https://144.91.82.153" : "0.0.0.0", function() {
-  console.log("CORS Anywhere server started...")
-})
+
 httpServer.listen(9999);
 httpsServer.listen(10001);
 
