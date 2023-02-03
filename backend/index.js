@@ -50,7 +50,7 @@ try {
     privateKey, 
     certificate,
     credentials
-  }).listen(10002, config.server ?  "https://144.91.82.153" : "0.0.0.0", function() {
+  }).listen(10002, "0.0.0.0", function() {
     console.log("CORS Anywhere server started...")
   }, )
 } catch (error) {
