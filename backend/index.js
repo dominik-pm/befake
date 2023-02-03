@@ -48,9 +48,8 @@ try {
     requireHeader: ['origin', 'x-requested-with'],
     removeHeaders: ['cookie', 'cookie2'],
     httpsOptions: {
-      privateKey, 
-      certificate,
-      credentials
+      privateKey,
+      certificate
     }
   }).listen(10002, "0.0.0.0", function() {
     console.log("CORS Anywhere server started...")
