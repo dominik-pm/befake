@@ -1,6 +1,6 @@
 <script>
 import FriendPosts from '../components/posts/FriendPosts.vue';
-import config from '../data/config.js'
+import config from '../data/configClient.js'
 import MyInput from '../components/ui/Input.vue'
 import { Input } from 'postcss';
 

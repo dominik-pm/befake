@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import { event } from "vue-gtag";
-import config from "./../data/config.js";
+import config from "../data/configClient.js";
 
 const store = createStore({
   state() {

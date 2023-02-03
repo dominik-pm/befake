@@ -1,6 +1,6 @@
 <script>
 import { now } from 'moment'
-import config from '../../data/config.js'
+import config from '../../data/configClient.js'
 import 'tw-elements'
 import RealMoji from '../posts/Realmoji.vue'
 

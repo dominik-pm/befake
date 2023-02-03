@@ -1,7 +1,7 @@
 var fs = require('fs');
 var http = require('http')
 var https = require('https')
-var config = require('./../src/data/config.js')
+var config = require('../src/data/configServer.js')
 
 try {
   var privateKey  = fs.readFileSync('/etc/ssl/private/key.pem', 'utf8');
