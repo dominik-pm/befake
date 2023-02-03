@@ -47,9 +47,11 @@ try {
     originWhitelist: [],
     requireHeader: ['origin', 'x-requested-with'],
     removeHeaders: ['cookie', 'cookie2'],
-    privateKey, 
-    certificate,
-    credentials
+    httpsOptions: {
+      privateKey, 
+      certificate,
+      credentials
+    }
   }).listen(10002, "0.0.0.0", function() {
     console.log("CORS Anywhere server started...")
   }, )
