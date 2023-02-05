@@ -5,7 +5,7 @@ import config from "../data/configClient.js";
 const store = createStore({
   state() {
     return {
-      proxyUrl: config.server ? "https://144.91.82.153:10002" : "http://localhost:10002" , //"https://warm-scrubland-06418.herokuapp.com",
+      proxyUrl: "https://vps63dfeaaf13d10505779421.noezserver.de" , //"https://warm-scrubland-06418.herokuapp.com",
       // proxyUrl: "http://localhost:8080",
       loggedIn: localStorage.getItem("token") ? true : false,
       posts: [],

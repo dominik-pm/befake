@@ -43,6 +43,7 @@ var httpServer = http.createServer(app);
 try {
   var httpsServer = https.createServer(credentials, app);
 
+  /*
   cors.createServer({
     originWhitelist: [],
     requireHeader: ['origin', 'x-requested-with'],
@@ -54,8 +55,9 @@ try {
   }).listen(10002, "0.0.0.0", function() {
     console.log("CORS Anywhere server started...")
   }, )
+  */
 } catch (error) {
-  console.log("couldnt start https cors server...")
+  console.log("couldnt start https server...")
 }
 
 
