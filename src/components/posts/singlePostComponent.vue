@@ -189,11 +189,11 @@ export default defineComponent({
           </template>
         </GoogleMapsModal>
       </div>
-      <div class="relative top-0 left-0 w-[66%] m-auto">
+      <div class="relative top-0 left-0 m-auto">
         <img
           referrerpolicy="no-referrer"
           v-bind:src="post.photoURL"
-          class="relative top-0 left-0 rounded-md sm:w-[400px] w-[100%] m-auto"
+          class="relative top-0 left-0 rounded-md sm:w-[400px] m-w-[100%] m-auto"
           @click="hideSecondaryPhoto = !hideSecondaryPhoto" />
         <img
           referrerpolicy="no-referrer"
