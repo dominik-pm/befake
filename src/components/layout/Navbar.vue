@@ -38,15 +38,15 @@ export default {
       <div class="flex justify-between flex-col sm:flex-row items-center">
         <div>
           <!-- logo -->
-          <router-link
+          <a
             class="flex items-center cursor-pointer"
             v-clipboard:copy="copy"
-            to="/">
+            href="/">
             <img
               src="../../assets/favicon.ico"
               class="h-12 w-12 rounded-full object-cover mr-2" />
             <span class="text-3xl font-bold">BeFake</span>
-          </router-link>
+          </a>
         </div>
         <router-link
           to="#"

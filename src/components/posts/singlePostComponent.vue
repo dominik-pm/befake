@@ -189,7 +189,7 @@ export default defineComponent({
           </template>
         </GoogleMapsModal>
       </div>
-      <div class="relative top-0 left-0 max-w-[50] m-auto">
+      <div class="relative top-0 left-0 w-[66%] m-auto">
         <img
           referrerpolicy="no-referrer"
           v-bind:src="post.photoURL"
