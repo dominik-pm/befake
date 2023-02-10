@@ -129,17 +129,9 @@ export default defineComponent({
     class="block p-3 w-[100%] sm:w-auto bg-black sm:border sm:border-white rounded-lg shadow-md">
     <div class="flex flex-col">
       <div class="flex items-center sm:justify-center">
-        <img
+        <img v-if="post.user.profilePicture.url"
           referrerpolicy="no-referrer"
-          v-bind:src="
-            post.user.profilePicture
-              ? post.user.profilePicture.url
-              : 'https://ui-avatars.com/api/?length=1' +
-                '&name=' +
-                post.user.username +
-                '&background=' +
-                color
-          "
+          v-bind:src="post.user.profilePicture.url"
           class="w-10 rounded-[50%] sm:w-28"
           @error="
             'https://ui-avatars.com/api/?length=1' +
@@ -159,14 +151,6 @@ export default defineComponent({
               {{ reverseGeo }}
             </span>
           </div>
-        </div>
-        <div>
-          <!-- Add trash icon -->
-          <img
-            class="fill-white cursor-pointer"
-            @click="$store.dispatch('deletePost')"
-            v-if="isOwner"
-            src="../../assets/icons8-trash-can.svg" />
         </div>
         <GoogleMapsModal v-if="showModal" @close="showModal = false">
           <template v-slot:body>
