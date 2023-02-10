@@ -4,6 +4,7 @@ import About from "./pages/About.vue";
 import Friends from "./pages/Friends.vue";
 import Map from "./pages/Map.vue";
 import AllFriendPosts from "./pages/AllFriendPosts.vue"
+import AllPostsFeed from "./pages/AllPostsFeed.vue"
 import "./index.css";
 import App from "./App.vue";
 import VueClipboard from "vue3-clipboard";
@@ -24,7 +25,8 @@ const routes = [
   { path: "/about", component: About },
   { path: "/search", component: Friends },
   { path: "/map", component: Map },
-  { path: "/allfriendposts", component: AllFriendPosts}
+  { path: "/allfriendposts", component: AllFriendPosts},
+  { path: "/allpostsfeed", component: AllPostsFeed}
 ];
 const router = createRouter({
   // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
