@@ -5,12 +5,13 @@ import MyInput from '../components/ui/Input.vue'
 import { Input } from 'postcss';
 import singlePostViewVue from "../components/posts/singlePostView.vue";
 
-let posts
-
 export default {
     data() {
+        const posts = []
         return {
-            posts: []
+            posts,
+            page: 1,
+            loadPostsAvailable: true
         }
     },
     components: {
@@ -21,57 +22,44 @@ export default {
     },
     methods: {
         loadPosts() {
-            const page = 0
-            fetch(`${config.apiURL}/getPosts?site=${page}`)
+            console.log('loading posts - page: ' + this.page)
+
+            this.disablePostLoadingForSeconds(1)
+
+            if (config.test) {
+                this.posts = this.posts.concat(getDummyPosts())
+                return
+            }
+
+            fetch(`${config.apiURL}/getPosts?site=${this.page}`)
             .then((response) => response.json())
-            .then((data) => 
-            {
-                this.posts = data
+            .then((data) => {
+                this.posts = this.posts.concat(data)
             })
             .catch(err => {
                 console.log(err)
             })
         },
-        loadDummyPosts() {
-            this.posts.push({
-                "id": "zSvXlUMIEBVqa5pYnbMhW",
-                "username": "benn",
-                "url1": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/PEA86HmE91jcTMe5.webp",
-                "url2": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/g3u70SgaALNZbq-t.webp",
-                "comment": "Ausmisten macht Spaß", // nullable
-                "date": "2023-01-27T12:01:56",
-                "user": {
-                    "profilePicture": {
-                        "url": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp"
-                    }
-                },
-                "lat": null, // nullable
-                "long": null, // nullable
-                "userId": "zZAlTbMw1ySk8wZTnunzHdrOb6l1",
-                "seconds": null, // nullable
-                "nanoseconds": null // nullable
-            })
-            this.posts.push({
-                "id": "Z-NKjioTglzkCzD4ZqDcc",
-                "username": "domm",
-                "url1": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/z2LHM2bVjeZdhINx.webp",
-                "url2": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/UENtQDI6YXiuAOsi.webp",
-                "comment": null, // nullable
-                "date": "2023-02-08T11:25:03",
-                "user": {
-                    "profilePicture": {
-                        "url": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp"
-                    }
-                },
-                "lat": null, // nullable
-                "long": null, // nullable
-                "userId": "zZAlTbMw1ySk8wZTnunzHdrOb6l1",
-                "seconds": 1675851347, // nullable
-                "nanoseconds": 433000000 // nullable
-            })
+        disablePostLoadingForSeconds(seconds) {
+            this.loadPostsAvailable = false
+            setTimeout(() => {
+                this.loadPostsAvailable = true
+            }, 1000 * seconds)
+        },
+        loadMorePosts() {
+            if (this.loadPostsAvailable) {
+                this.page = this.page + 1
+                this.loadPosts()
+            }
+        },
+        handleScroll(e) {
+            let element = this.$refs.scrollComponent
+            if (element.getBoundingClientRect().bottom < window.innerHeight + 100) {
+                this.loadMorePosts()
+            }
         },
         mapPostToBerealPost(post) {
-            const createdAtSeconds = post.seconds != null ? post.seconds : this.getSecondsFromTimeString(post.date);
+            const createdAtSeconds = post.seconds != null ? post.seconds : getSecondsFromTimeString(post.date);
             const profilePicture = post.profilePicture
 
             return {
@@ -107,22 +95,66 @@ export default {
                 },
                 "realMojis": []
             }
-        },
-        getSecondsFromTimeString(dateString) {
-            let date = new Date(dateString)
-            return Math.floor(date.getTime() / 1000)
         }
     },
     mounted() {
-        if (config.test) {
-            this.loadDummyPosts()
-        } else this.loadPosts()
-    }
+        window.addEventListener("scroll", this.handleScroll)
+        this.loadPosts()
+    },
+    unmounted() {
+        window.removeEventListener("scroll", this.handleScroll)
+    },
+}
+const getSecondsFromTimeString = (dateString) => {
+    let date = new Date(dateString)
+    return Math.floor(date.getTime() / 1000)
+}
+const getDummyPosts = () => {
+    const posts = []
+    posts.push({
+        "id": "zSvXlUMIEBVqa5pYnbMhW",
+        "username": "benn",
+        "url1": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/PEA86HmE91jcTMe5.webp",
+        "url2": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/g3u70SgaALNZbq-t.webp",
+        "comment": "Ausmisten macht Spaß", // nullable
+        "date": "2023-01-27T12:01:56",
+        "user": {
+            "profilePicture": {
+                "url": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp"
+            }
+        },
+        "lat": null, // nullable
+        "long": null, // nullable
+        "userId": "zZAlTbMw1ySk8wZTnunzHdrOb6l1",
+        "seconds": null, // nullable
+        "nanoseconds": null // nullable
+    })
+    posts.push({
+        "id": "Z-NKjioTglzkCzD4ZqDcc",
+        "username": "domm",
+        "url1": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/z2LHM2bVjeZdhINx.webp",
+        "url2": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/UENtQDI6YXiuAOsi.webp",
+        "comment": null, // nullable
+        "date": "2023-02-08T11:25:03",
+        "user": {
+            "profilePicture": {
+                "url": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp"
+            }
+        },
+        "lat": null, // nullable
+        "long": null, // nullable
+        "userId": "zZAlTbMw1ySk8wZTnunzHdrOb6l1",
+        "seconds": 1675851347, // nullable
+        "nanoseconds": 433000000 // nullable
+    })
+    return posts
 }
 </script>
 
 <template>
-    <div v-for="(post, index) in posts" class="m-auto">
-        <single-post-view-vue :post="mapPostToBerealPost(post)" :realmojis="[]" class="mt-10" />
+    <div class="scrolling-component" ref="scrollComponent">
+        <div v-for="(post, index) in posts" class="m-auto">
+            <single-post-view-vue :post="mapPostToBerealPost(post)" :realmojis="[]" class="mt-10" />
+        </div>
     </div>
 </template>
