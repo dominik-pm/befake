@@ -94,6 +94,11 @@ export default {
               <router-link to="allfriendposts">Posts from friends!</router-link>
             </div>
           </div>
+          <div class="cursor-pointer text-white sm:py-2 py-[0.6px] sm:px-3 rounded-md font-bold">
+            <div>
+              <router-link to="allpostsfeed">All posts feed!</router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
