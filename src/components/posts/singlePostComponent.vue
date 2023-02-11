@@ -34,7 +34,7 @@ export default defineComponent({
     },
     postdate() {
       return moment(this.post.creationDate._seconds * 1000).format(
-        "MM-DD-YYYY h:mm:ss"
+        "DD.MM.YYYY HH:mm:ss"
       );
     },
     cleancomment(s) {
