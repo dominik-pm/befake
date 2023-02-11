@@ -26,13 +26,14 @@ img[src*="ui-avatars.com"] {
       }"
       @click="
         center = m.position;
-        openMarker(index);
+        openMarker(index, m);
       ">
       <GMapInfoWindow
         :closeclick="true"
         @closeclick="openMarker(null)"
-        :opened="openedMarkerID === index">
-        <singlePostComponent :post="m.post" class="" />
+        :opened="openedMarkerID === index" 
+        v-if="openedMarkerID === index">
+        <singlePostComponent :post="m.post" :realmojis="realmojis" class="" /> 
       </GMapInfoWindow>
     </GMapMarker>
   </GMapMap>
@@ -40,6 +41,8 @@ img[src*="ui-avatars.com"] {
 <script>
 import singlePostComponent from "../components/posts/singlePostComponent.vue";
 import sha256 from "js-sha256";
+import config from '../data/configClient.js'
+
 export default {
   name: "App",
   data() {
@@ -210,21 +213,36 @@ export default {
       openedMarkerID: null,
       center: { lat: 0, lng: 0 },
       markers: [],
+      posts: [],
+      realmojis: []
     };
   },
   async beforeMount() {
-    await this.$store.dispatch("getPosts");
-    this.markers = this.$store.state.posts
+    await fetch(`${config.apiURL}/getLocationPosts`)
+    .then((response) => response.json())
+    .then((data) => {
+        data.forEach((post, index, data) => {
+            data[index] = this.mapPostToBerealPost(post)
+        });
+        this.posts = data
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
+    await this.getRealmojis()
+
+    this.markers = this.posts
       .filter((p) => p.location)
       .map((post) => {
-        console.log(post);
+
         return {
           position: {
             lat: post.location._latitude,
             lng: post.location._longitude,
             // gravatar identicon
           },
-          pic: post.user.profilePicture
+          pic: post.user.profilePicture.url
             ? post.user.profilePicture.url
             : `https://ui-avatars.com/api/?length=1&name=${
                 post.user.username
@@ -239,13 +257,65 @@ export default {
       this.center.lng += m.position.lng;
     });
     this.center.lat /= this.markers.length;
-    this.center.lng /= this.markers.length;
-    console.log(this.markers);
+    this.center.lng /= this.markers.length; 
   },
   methods: {
     openMarker(id) {
       this.openedMarkerID = id;
     },
+    mapPostToBerealPost(post) {
+      const createdAtSeconds = post.seconds != null ? post.seconds : getSecondsFromTimeString(post.date);
+      const profilePicture = post.profilePicture
+      const location = post.long && post.lat ? {
+          "_latitude": post.lat,
+          "_longitude": post.long
+      } : null
+
+      return {
+          "id": post.id,
+          "notificationID": "",
+          "ownerID": post.userId,
+          "userName": post.username,
+          "user": {
+              "id": post.userId,
+              "username": post.username,
+              "profilePicture": {
+                  "height": 200,
+                  "width": 200,
+                  "url": profilePicture
+              }
+          },
+          "caption": post.comment,
+          "photoURL": post.url1,
+          "imageWidth": 1500,
+          "imageHeight": 2000,
+          "secondaryPhotoURL": post.url2,
+          "secondaryImageHeight": 2000,
+          "secondaryImageWidth": 1500,
+          "retakeCounter": 0,
+          "creationDate": {
+              "_seconds": createdAtSeconds,
+              "_nanoseconds": 0
+          },
+          "updatedAt": createdAtSeconds*1000,
+          "takenAt": {
+              "_seconds": createdAtSeconds*1000,
+              "_nanoseconds": 0
+          },
+          "location": location,
+          "realMojis": []
+      }
+    },
+    async getRealmojis() {
+      fetch(`${this.$store.state.proxyUrl}/https://mobile.bereal.com/api/person/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => this.realmojis = data.realmojis)
+    }
   },
   components: {
     singlePostComponent,

@@ -106,7 +106,6 @@ export default defineComponent({
   mounted() {
     this.realmojisReactive.push(this.post.realMojis.slice(0, this.colCount))
     this.realmojisReactive.push(this.post.realMojis)
-    console.log(this.post)
   },
   components: { GoogleMapsModal, MyButton, MyInput, UploadRealmoji, Realmoji },
 });
