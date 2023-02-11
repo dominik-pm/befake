@@ -130,9 +130,17 @@ export default defineComponent({
     class="block p-3 w-[100%] sm:w-auto bg-black sm:border sm:border-white rounded-lg shadow-md">
     <div class="flex flex-col">
       <div class="flex items-center sm:justify-center">
-        <img v-if="post.user.profilePicture.url"
+        <img
           referrerpolicy="no-referrer"
-          v-bind:src="post.user.profilePicture.url"
+          v-bind:src="post.user.profilePicture && post.user.profilePicture.url 
+                ? post.user.profilePicture.url
+                : 'https://ui-avatars.com/api/?length=1' +
+                '&name=' +
+                post.user.username[0] +
+                '&background=' +
+                color +
+                '&rounded=true'
+          "
           class="w-10 rounded-[50%] sm:w-28"
           @error="
             'https://ui-avatars.com/api/?length=1' +

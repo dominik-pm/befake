@@ -149,9 +149,10 @@ export default defineComponent({
           @error="
             'https://ui-avatars.com/api/?length=1' +
               '&name=' +
-              post.user.username +
+              post.user.username[0] +
               '&background=' +
-              color
+              color +
+              '&rounded=true'
           " />
         <div>
           <div>

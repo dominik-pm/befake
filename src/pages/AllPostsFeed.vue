@@ -64,6 +64,10 @@ export default {
         mapPostToBerealPost(post) {
             const createdAtSeconds = post.seconds != null ? post.seconds : getSecondsFromTimeString(post.date);
             const profilePicture = post.profilePicture
+            const location = post.long && post.lat ? {
+                "_latitude": post.lat,
+                "_longitude": post.long
+            } : null
 
             return {
                 "id": post.id,
@@ -96,6 +100,7 @@ export default {
                     "_seconds": createdAtSeconds*1000,
                     "_nanoseconds": 0
                 },
+                "location": location,
                 "realMojis": []
             }
         }
@@ -121,13 +126,9 @@ const getDummyPosts = () => {
         "url2": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/g3u70SgaALNZbq-t.webp",
         "comment": "Ausmisten macht Spaß", // nullable
         "date": "2023-01-27T12:01:56",
-        "user": {
-            "profilePicture": {
-                "url": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp"
-            }
-        },
-        "lat": null, // nullable
-        "long": null, // nullable
+        "profilePicture": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp",
+        "lat": 48.715, // nullable
+        "long": 15.268, // nullable
         "userId": "zZAlTbMw1ySk8wZTnunzHdrOb6l1",
         "seconds": null, // nullable
         "nanoseconds": null // nullable
@@ -139,11 +140,7 @@ const getDummyPosts = () => {
         "url2": "https://cdn.bereal.network/Photos/zZAlTbMw1ySk8wZTnunzHdrOb6l1/post/UENtQDI6YXiuAOsi.webp",
         "comment": null, // nullable
         "date": "2023-02-08T11:25:03",
-        "user": {
-            "profilePicture": {
-                "url": "https://cdn.bereal.network/Photos/1CULHhV1G3PqK923EeJm4Xutw5F2/profile/LDcaieJY3A0_lQNrvc2JA.webp"
-            }
-        },
+        "profilePicture": null,
         "lat": null, // nullable
         "long": null, // nullable
         "userId": "zZAlTbMw1ySk8wZTnunzHdrOb6l1",
