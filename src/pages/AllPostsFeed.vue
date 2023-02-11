@@ -34,6 +34,11 @@ export default {
             fetch(`${config.apiURL}/getPosts?site=${this.page}`)
             .then((response) => response.json())
             .then((data) => {
+                data.forEach((post, index, data) => {
+                    data[index] = this.mapPostToBerealPost(post)
+                });
+                console.log("data object")
+                console.log(data)
                 this.posts = this.posts.concat(data)
             })
             .catch(err => {
@@ -154,7 +159,7 @@ const getDummyPosts = () => {
 <template>
     <div class="scrolling-component" ref="scrollComponent">
         <div v-for="(post, index) in posts" class="m-auto">
-            <single-post-view-vue :post="mapPostToBerealPost(post)" :realmojis="[]" class="mt-10" />
+            <single-post-view-vue :post="post" :realmojis="[]" class="mt-10" />
         </div>
     </div>
 </template>

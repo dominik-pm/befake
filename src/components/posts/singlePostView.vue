@@ -25,7 +25,7 @@ export default defineComponent({
   },
   methods: {
     reverseImages() {
-      const temp = this.post.photoURL;
+      let temp = this.post.photoURL;
       this.post.photoURL = this.post.secondaryPhotoURL;
       this.post.secondaryPhotoURL = temp;
     },
@@ -99,6 +99,7 @@ export default defineComponent({
     if (this.$store.state.user.id === this.post.ownerID) {
       this.isOwner = true;
     }
+    console.log(this.post)
   },
   mounted() {
 
@@ -171,12 +172,12 @@ export default defineComponent({
       <div class="relative top-0 left-0 m-auto">
         <img
           referrerpolicy="no-referrer"
-          v-bind:src="post.photoURL"
+          :src="post.photoURL"
           class="relative top-0 left-0 rounded-md sm:w-[400px] m-w-[100%] m-auto"
           @click="hideSecondaryPhoto = !hideSecondaryPhoto" />
         <img
           referrerpolicy="no-referrer"
-          v-bind:src="post.secondaryPhotoURL"
+          :src="post.secondaryPhotoURL"
           class="absolute top-2 left-2 w-[35%] rounded-md border-2 border-black"
           @click="reverseImages"
           v-if="!hideSecondaryPhoto" />
