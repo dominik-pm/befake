@@ -37,8 +37,6 @@ export default {
                 data.forEach((post, index, data) => {
                     data[index] = this.mapPostToBerealPost(post)
                 });
-                console.log("data object")
-                console.log(data)
                 this.posts = this.posts.concat(data)
             })
             .catch(err => {
